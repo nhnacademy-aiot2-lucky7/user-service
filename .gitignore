@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### .env 무시
+.env
+
 ### STS ###
 .apt_generated
 .classpath

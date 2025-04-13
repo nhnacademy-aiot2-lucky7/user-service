@@ -130,16 +130,14 @@ public class User {
      * @param userName     이름
      * @param userEmail    이메일
      * @param userPassword 비밀번호
-     * @param imageUrl 이미지 경로
-     * @param description 기본 설명
      */
-    private User(Role userRole, String userName, String userEmail, String userPassword, String imageUrl, String description) {
+    private User(Role userRole, String userName, String userEmail, String userPassword) {
         this.userRole = userRole;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.imageUrl = imageUrl;
-        this.description = description;
+        this.imageUrl = "imageUrl";
+        this.description = "description";
     }
 
     /**
@@ -151,8 +149,8 @@ public class User {
      * @param userPassword 비밀번호
      * @return 생성된 사용자 객체
      */
-    public static User ofNewUser(Role userRole, String userName, String userEmail, String userPassword, String imageUrl, String description) {
-        return new User(userRole, userName, userEmail, userPassword, imageUrl, description);
+    public static User ofNewUser(Role userRole, String userName, String userEmail, String userPassword) {
+        return new User(userRole, userName, userEmail, userPassword);
     }
 
     /**
@@ -163,8 +161,8 @@ public class User {
      * @param userPassword 비밀번호
      * @return 생성된 사용자 객체
      */
-    public static User ofNewUser(String userName, String userEmail, String userPassword, String imageUrl, String description) {
-        return new User(Role.USER, userName, userEmail, userPassword, imageUrl, description);
+    public static User ofNewUser(String userName, String userEmail, String userPassword) {
+        return new User(Role.USER, userName, userEmail, userPassword);
     }
 
     /**
@@ -176,6 +174,24 @@ public class User {
     public void update(String userName, String userEmail) {
         this.userName = userName;
         this.userEmail = userEmail;
+    }
+
+    /**
+     * 이미지 url 업데이트합니다.
+     *
+     * @param imageUrl 이미지 경로
+     */
+    public void updateImage(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
+
+    /**
+     * 이미지 url 업데이트합니다.
+     *
+     * @param description
+     */
+    public void updateDescription(String description){
+        this.description = description;
     }
 
     /**

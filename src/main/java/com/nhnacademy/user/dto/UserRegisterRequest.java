@@ -67,11 +67,11 @@ public class UserRegisterRequest {
      * @param userEmail    사용자 이메일
      * @param userPassword 사용자 비밀번호
      */
-    public UserRegisterRequest(String userName, String userEmail, String userPassword, String iamgeUrl, String description) {
+    public UserRegisterRequest(String userName, String userEmail, String userPassword) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.iamgeUrl = iamgeUrl;
-        this.description = description;
+        this.iamgeUrl = "imageUrl";
+        this.description = "description";
     }
 }

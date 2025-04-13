@@ -1,8 +1,12 @@
 package com.nhnacademy.user.repository.impl;
 
+
 import com.nhnacademy.user.domain.User;
+import com.nhnacademy.user.domain.QUser;
 import com.nhnacademy.user.dto.UserResponse;
 import com.nhnacademy.user.repository.CustomUserRepository;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.Optional;

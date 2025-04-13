@@ -10,6 +10,8 @@ import com.nhnacademy.user.repository.UserRepository;
 import com.nhnacademy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,6 @@ import java.util.Optional;
  * <p>
  * 회원가입, 조회, 로그인 등의 기능을 제공합니다.
  */
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    Logger log = LoggerFactory.getLogger(getClass());
     /**
      * 새로운 사용자를 등록합니다.
      * <p>
@@ -51,9 +53,7 @@ public class UserServiceImpl implements UserService {
         User user = User.ofNewUser(
                 registerUserRequest.getUserName(),
                 registerUserRequest.getUserEmail(),
-                registerUserRequest.getUserPassword(),
-                registerUserRequest.getIamgeUrl(),
-                registerUserRequest.getDescription()
+                registerUserRequest.getUserPassword()
         );
         userRepository.save(user);
 

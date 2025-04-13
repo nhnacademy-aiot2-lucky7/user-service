@@ -2,7 +2,9 @@ package com.nhnacademy.user.repository;
 
 import com.nhnacademy.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DialectOverride;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,21 +28,18 @@ class UserRepositoryTest {
      *
      */
     @Test
+    @DisplayName("User 이메일이 존재하는지 확인")
     void existsByUserEmail() {
-        // given: 새로운 사용자 생성 및 저장
         User user = User.ofNewUser(
                 "user",
                 "user@email.com",
-                "userPassword",
-                "default",
-                "default"
+                "userPassword"
         );
         testEntityManager.persist(user);
 
-        // when: 저장된 사용자 조회
         User dbUser = testEntityManager.find(User.class, user.getUserNo());
 
-        // then: 저장 및 조회 결과 확인
+
         Assertions.assertNotNull(dbUser);
         Assertions.assertEquals("user@email.com", dbUser.getUserEmail());
     }

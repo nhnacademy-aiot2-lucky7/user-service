@@ -34,9 +34,7 @@ class CustomUserRepositoryTest {
         User user = User.ofNewUser(
                 "user",
                 "user@email.com",
-                "userPassword",
-                "default",
-                "default"
+                "userPassword"
         );
 
         return userRepository.save(user);

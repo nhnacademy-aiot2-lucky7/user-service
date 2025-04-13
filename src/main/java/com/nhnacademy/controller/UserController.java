@@ -5,7 +5,8 @@ import com.nhnacademy.user.dto.UserRegisterRequest;
 import com.nhnacademy.user.dto.UserResponse;
 import com.nhnacademy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,16 +16,20 @@ import org.springframework.web.bind.annotation.*;
  * 사용자 관련 요청을 처리하는 REST 컨트롤러입니다.
  * 회원가입, 로그인, 사용자 조회 기능을 제공합니다.
  */
-@Slf4j
+
 @RestController
 @RequestMapping(value = {"/users"})
-@RequiredArgsConstructor
 public class UserController {
 
+    Logger log = LoggerFactory.getLogger(getClass());
     /**
      * 사용자 서비스 객체입니다. 사용자 생성, 조회, 로그인 등의 로직을 처리합니다.
      */
     private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 회원가입 요청을 처리합니다.

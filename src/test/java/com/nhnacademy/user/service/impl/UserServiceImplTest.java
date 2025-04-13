@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Comment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,22 +39,18 @@ class UserServiceImplTest {
         testUser = User.ofNewUser(
                 "user1",
                 "user1@email.com",
-                "user12345?",
-                "default",
-                "default"
+                "user12345?"
         );
     }
 
     @Test
-    @Comment("회원가입: user 등록")
+    @DisplayName("회원가입: user 등록")
     void createUser() {
 
         UserRegisterRequest registerUserRequest = new UserRegisterRequest(
                 testUser.getUserName(),
                 testUser.getUserEmail(),
-                testUser.getUserPassword(),
-                testUser.getImageUrl(),
-                testUser.getDescription()
+                testUser.getUserPassword()
         );
 
         UserResponse fakeResponse = new UserResponse(
@@ -89,7 +86,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Comment("user조회: 성공")
+    @DisplayName("user조회: 성공")
     void getUser_success() {
         UserResponse fakeResponse = new UserResponse(
                 User.Role.USER, 1l, "user1", "user1@email.com", "default", "default"
@@ -111,7 +108,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Comment("user조회: 실패")
+    @DisplayName("user조회: 실패")
     void getUser_fail() {
 
         // 빈 Optional을 주면 에러 발생
@@ -127,7 +124,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Comment("로그인_성공")
+    @DisplayName("로그인_성공")
     void loginUser_success() {
 
         UserResponse fakeResponse = new UserResponse(
@@ -153,7 +150,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Comment("로그인_실패")
+    @DisplayName("로그인_실패")
     void loginUser_fail() {
 
         UserLoginRequest loginRequest = new UserLoginRequest(
