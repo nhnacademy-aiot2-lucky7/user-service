@@ -24,10 +24,13 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     Logger log = LoggerFactory.getLogger(getClass());
     /**

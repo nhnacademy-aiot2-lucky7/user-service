@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
  * 회원의 이름, 이메일, 비밀번호, 권한, 가입/수정/탈퇴 일자 등의 정보를 관리합니다.
  */
 @Entity
-@Getter
 @Table(name = "users")
 @NoArgsConstructor
 public class User {
@@ -201,5 +200,45 @@ public class User {
      */
     public void changePassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public Long getUserNo() {
+        return userNo;
+    }
+
+    public Role getUserRole() {
+        return userRole;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public LocalDateTime getWithdrawalAt() {
+        return withdrawalAt;
     }
 }

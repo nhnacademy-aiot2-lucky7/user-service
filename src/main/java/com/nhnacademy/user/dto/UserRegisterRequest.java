@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
  * 사용자 이름, 이메일, 비밀번호 정보를 포함하며,
  * 유효성 검사를 통해 요청 데이터의 형식을 검증합니다.
  */
-@Getter
 @NoArgsConstructor
 @EqualsAndHashCode
 public class UserRegisterRequest {
@@ -73,5 +72,25 @@ public class UserRegisterRequest {
         this.userPassword = userPassword;
         this.iamgeUrl = "imageUrl";
         this.description = "description";
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public String getIamgeUrl() {
+        return iamgeUrl;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

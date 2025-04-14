@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
  * <p>
  * 이메일과 비밀번호를 받아 로그인 검증에 사용됩니다.
  */
-@Getter
 @NoArgsConstructor
 public class UserLoginRequest {
 
@@ -43,5 +42,13 @@ public class UserLoginRequest {
     public UserLoginRequest(String userEmail, String userPassword) {
         this.userEmail = userEmail;
         this.userPassword = userPassword;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
     }
 }
