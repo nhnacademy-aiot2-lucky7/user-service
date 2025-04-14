@@ -54,7 +54,7 @@ class UserServiceImplTest {
         );
 
         UserResponse fakeResponse = new UserResponse(
-                User.Role.USER, 1l, "user1", "user1@email.com", "default","default"
+                User.Role.USER, 1l, "user1", "user1@email.com"
         );
 
         Mockito.when(userRepository.existsByUserEmail(Mockito.anyString())).thenReturn(false);
@@ -89,7 +89,7 @@ class UserServiceImplTest {
     @DisplayName("user조회: 성공")
     void getUser_success() {
         UserResponse fakeResponse = new UserResponse(
-                User.Role.USER, 1l, "user1", "user1@email.com", "default", "default"
+                User.Role.USER, 1l, "user1", "user1@email.com"
         );
         Mockito.when(userRepository.findUserResponseByUserEmail(Mockito.anyString())).thenReturn(Optional.of(fakeResponse));
 
@@ -128,7 +128,7 @@ class UserServiceImplTest {
     void loginUser_success() {
 
         UserResponse fakeResponse = new UserResponse(
-                User.Role.USER, 1l, "user1", "user1@email.com", "default", "default"
+                User.Role.USER, 1l, "user1", "user1@email.com"
         );
         UserLoginRequest loginRequest = new UserLoginRequest(
                 "user1@email.com",

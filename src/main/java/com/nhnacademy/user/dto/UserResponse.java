@@ -46,12 +46,6 @@ public class UserResponse {
     @JsonProperty("userEmail")
     String userEmail;
 
-    @JsonProperty("iamgeUrl")
-    String iamgeUrl;
-
-    @JsonProperty("description")
-    String description;
-
     /**
      * 모든 사용자 정보를 포함하는 생성자입니다.
      *
@@ -60,12 +54,10 @@ public class UserResponse {
      * @param userName  사용자 이름
      * @param userEmail 사용자 이메일
      */
-    public UserResponse(User.Role userRole, Long userNo, String userName, String userEmail, String iamgeUrl, String description) {
+    public UserResponse(User.Role userRole, Long userNo, String userName, String userEmail) {
         this.userRole = userRole;
         this.userNo = userNo;
         this.userName = userName;
         this.userEmail = userEmail;
-        this.iamgeUrl = iamgeUrl;
-        this.description = description;
     }
 }

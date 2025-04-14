@@ -2,19 +2,20 @@ package com.nhnacademy.user.repository;
 
 import com.nhnacademy.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.DialectOverride;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * {@link UserRepository}의 기능 중 일부를 검증하는 테스트 클래스입니다.
  */
 @Slf4j
 @DataJpaTest
+@ActiveProfiles("test")
 class UserRepositoryTest {
 
     @Autowired

@@ -2,6 +2,7 @@ package com.nhnacademy.user.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -15,7 +16,8 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class User {
 
     /**
@@ -65,20 +67,6 @@ public class User {
     @Column(name = "user_password", nullable = false, length = 45)
     @Comment("사용자-비밀번호")
     private String userPassword;
-
-    /**
-     * 이미지 경로
-     */
-    @Column(name = "image_url")
-    @Comment("사용자-기본이미지")
-    private String imageUrl;
-
-    /**
-     * 사용자 설명
-     */
-    @Column(name = "description")
-    @Comment("사용자-설명")
-    private String description;
 
     /**
      * 가입일자 (생성 시 자동 설정)
@@ -135,21 +123,6 @@ public class User {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.imageUrl = "imageUrl";
-        this.description = "description";
-    }
-
-    /**
-     * 모든 정보를 지정하여 새로운 사용자 객체를 생성합니다.
-     *
-     * @param userRole     사용자 권한
-     * @param userName     이름
-     * @param userEmail    이메일
-     * @param userPassword 비밀번호
-     * @return 생성된 사용자 객체
-     */
-    public static User ofNewUser(Role userRole, String userName, String userEmail, String userPassword) {
-        return new User(userRole, userName, userEmail, userPassword);
     }
 
     /**
@@ -176,69 +149,11 @@ public class User {
     }
 
     /**
-     * 이미지 url 업데이트합니다.
-     *
-     * @param imageUrl 이미지 경로
-     */
-    public void updateImage(String imageUrl){
-        this.imageUrl = imageUrl;
-    }
-
-    /**
-     * 이미지 url 업데이트합니다.
-     *
-     * @param description
-     */
-    public void updateDescription(String description){
-        this.description = description;
-    }
-
-    /**
      * 비밀번호를 변경합니다.
      *
      * @param userPassword 새로운 비밀번호
      */
     public void changePassword(String userPassword) {
         this.userPassword = userPassword;
-    }
-
-    public Long getUserNo() {
-        return userNo;
-    }
-
-    public Role getUserRole() {
-        return userRole;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public LocalDateTime getWithdrawalAt() {
-        return withdrawalAt;
     }
 }

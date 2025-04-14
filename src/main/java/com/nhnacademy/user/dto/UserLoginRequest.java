@@ -1,6 +1,7 @@
 package com.nhnacademy.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
  * 이메일과 비밀번호를 받아 로그인 검증에 사용됩니다.
  */
 @NoArgsConstructor
+@Getter
 public class UserLoginRequest {
 
     /**
@@ -19,8 +21,9 @@ public class UserLoginRequest {
      * <p>
      * 공백이 아닌 문자열이어야 하며, JSON 필드 이름은 "userEmail"입니다.
      */
-    @NotBlank
+    @NotBlank(message = "이메일은 필수 입력 항목입니다.")
     @JsonProperty("userEmail")
+    @Email(message = "유효한 이메일 주소를 입력해주세요.")
     String userEmail;
 
     /**
@@ -30,7 +33,7 @@ public class UserLoginRequest {
      * JSON 필드 이름은 "userPassword"입니다.
      */
     @JsonProperty("userPassword")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{6,20}$")
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{6,20}")
     String userPassword;
 
     /**
@@ -42,13 +45,5 @@ public class UserLoginRequest {
     public UserLoginRequest(String userEmail, String userPassword) {
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
     }
 }

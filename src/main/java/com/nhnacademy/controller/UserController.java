@@ -4,6 +4,7 @@ import com.nhnacademy.user.dto.UserLoginRequest;
 import com.nhnacademy.user.dto.UserRegisterRequest;
 import com.nhnacademy.user.dto.UserResponse;
 import com.nhnacademy.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = {"/users"})
+@Slf4j
 public class UserController {
 
-    Logger log = LoggerFactory.getLogger(getClass());
     /**
      * 사용자 서비스 객체입니다. 사용자 생성, 조회, 로그인 등의 로직을 처리합니다.
      */

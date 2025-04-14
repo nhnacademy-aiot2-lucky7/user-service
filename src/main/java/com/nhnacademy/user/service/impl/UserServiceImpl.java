@@ -24,6 +24,7 @@ import java.util.Optional;
  */
 @Service
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -32,7 +33,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    Logger log = LoggerFactory.getLogger(getClass());
     /**
      * 새로운 사용자를 등록합니다.
      * <p>

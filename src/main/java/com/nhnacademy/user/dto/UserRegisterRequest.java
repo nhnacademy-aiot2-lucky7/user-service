@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @EqualsAndHashCode
+@Getter
 public class UserRegisterRequest {
 
     /**
@@ -53,12 +54,6 @@ public class UserRegisterRequest {
     )
     private String userPassword;
 
-    @JsonProperty("iamgeUrl")
-    private String iamgeUrl;
-
-    @JsonProperty("description")
-    private String description;
-
     /**
      * 모든 필드를 지정하는 생성자입니다.
      *
@@ -70,27 +65,5 @@ public class UserRegisterRequest {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.iamgeUrl = "imageUrl";
-        this.description = "description";
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public String getIamgeUrl() {
-        return iamgeUrl;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }
