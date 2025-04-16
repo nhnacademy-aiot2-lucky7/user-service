@@ -49,17 +49,6 @@ public class ActuatorInfoConfig {
 
     @Bean
     public InfoContributor customInfoContributor() {
-        /*return builder -> builder
-                .withDetail("app",
-                        Map.of(
-                                "name", name,
-                                "description", description,
-                                "content-type", List.of(contents.split(",")),
-                                "version", version
-                        )
-                )
-                .withDetail("company", company);*/
-
         return builder -> builder
                 .withDetail("info",
                         new InfoResponse(
