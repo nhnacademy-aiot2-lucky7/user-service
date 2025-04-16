@@ -1,47 +1,71 @@
 package com.nhnacademy.user.repository;
 
 import com.nhnacademy.user.domain.User;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
-/**
- * {@link UserRepository}의 기능 중 일부를 검증하는 테스트 클래스입니다.
- */
-@Slf4j
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 @ActiveProfiles("test")
 class UserRepositoryTest {
 
     @Autowired
-    TestEntityManager testEntityManager;
+    private UserRepository userRepository;
 
-    /**
-     * 사용자의 이메일이 존재하는지 확인하는 테스트
-     *
-     * 실제 데이터베이스에 사용자 정보를 저장하고,
-     * 이메일 기준으로 조회되는지 확인합니다.
-     *
-     */
     @Test
-    @DisplayName("User 이메일이 존재하는지 확인")
-    void existsByUserEmail() {
-        User user = User.ofNewUser(
+    @DisplayName("이메일 존재 여부 확인 - 존재할 경우")
+    void testExistsByUserEmail_true() {
+        // given
+        User user = User.ofNewMember(
                 "user",
                 "user@email.com",
-                "userPassword"
+                "userPassword",
+                "010-1234-5678",
+                "인사과"
         );
-        testEntityManager.persist(user);
+        userRepository.save(user);
 
-        User dbUser = testEntityManager.find(User.class, user.getUserNo());
+        // when
+        boolean exists = userRepository.existsByUserEmail("user@email.com");
 
+        // then
+        assertThat(exists).isTrue();
+    }
 
-        Assertions.assertNotNull(dbUser);
-        Assertions.assertEquals("user@email.com", dbUser.getUserEmail());
+    @Test
+    @DisplayName("이메일 존재 여부 확인 - 존재하지 않을 경우")
+    void testExistsByUserEmail_false() {
+        // when
+        boolean exists = userRepository.existsByUserEmail("nope@nhn.com");
+
+        // then
+        assertThat(exists).isFalse();
+    }
+
+    @Test
+    @DisplayName("이메일로 사용자 조회")
+    void testFindByUserEmail() {
+        // given
+        User user = User.ofNewMember(
+                "user",
+                "user@email.com",
+                "userPassword",
+                "010-1234-5678",
+                "인사과"
+        );
+        userRepository.save(user);
+
+        // when
+        Optional<User> result = userRepository.findByUserEmail("user@email.com");
+
+        // then
+        assertThat(result).isPresent();
+        assertThat(result.get().getUserName()).isEqualTo("user");
     }
 }

@@ -37,7 +37,9 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                         qUser.userRole,
                         qUser.userNo,
                         qUser.userName,
-                        qUser.userEmail
+                        qUser.userEmail,
+                        qUser.userPhone,
+                        qUser.userDepartment
                 ))
                 .from(qUser)
                 .where(qUser.userNo.eq(userNo))
@@ -61,7 +63,9 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                         qUser.userRole,
                         qUser.userNo,
                         qUser.userName,
-                        qUser.userEmail
+                        qUser.userEmail,
+                        qUser.userPhone,
+                        qUser.userDepartment
                 ))
                 .from(qUser)
                 .where(qUser.userEmail.eq(userEmail))

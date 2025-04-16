@@ -1,13 +1,13 @@
 package com.nhnacademy.user.service.impl;
 
 import com.nhnacademy.common.exception.NotFoundException;
+import com.nhnacademy.common.exception.UnauthorizedException;
 import com.nhnacademy.user.domain.User;
 import com.nhnacademy.user.dto.UserLoginRequest;
 import com.nhnacademy.user.dto.UserRegisterRequest;
 import com.nhnacademy.user.dto.UserResponse;
 import com.nhnacademy.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Comment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.lang.reflect.Field;
@@ -34,27 +37,39 @@ class UserServiceImplTest {
 
     private User testUser;
 
+    @Spy
+    BCryptPasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setUp() {
-        testUser = User.ofNewUser(
+        testUser = User.ofNewMember(
                 "user1",
                 "user1@email.com",
-                "user12345?"
+                "user12345?",
+                "010-1234-5678",
+                "인사과"
         );
     }
 
     @Test
-    @DisplayName("회원가입: user 등록")
+    @DisplayName("회원가입 - user 등록")
     void createUser() {
 
         UserRegisterRequest registerUserRequest = new UserRegisterRequest(
                 testUser.getUserName(),
                 testUser.getUserEmail(),
-                testUser.getUserPassword()
+                testUser.getUserPassword(),
+                testUser.getUserPhone(),
+                testUser.getUserDepartment()
         );
 
         UserResponse fakeResponse = new UserResponse(
-                User.Role.USER, 1l, "user1", "user1@email.com"
+                User.Role.MEMBER,
+                1l,
+                "user1",
+                "user1@email.com",
+                "010-1234-5678",
+                "인사과"
         );
 
         Mockito.when(userRepository.existsByUserEmail(Mockito.anyString())).thenReturn(false);
@@ -72,24 +87,19 @@ class UserServiceImplTest {
             return null;
         }).when(userRepository).save(Mockito.any(User.class));
 
-        UserResponse response = userService.createUser(registerUserRequest);
-
-        Assertions.assertNotNull(response);
-
-        Assertions.assertAll(
-                () -> {
-                    Assertions.assertEquals(User.Role.USER, response.getUserRole());
-                    Assertions.assertEquals("user1", response.getUserName());
-                    Assertions.assertEquals("user1@email.com", response.getUserEmail());
-                }
-        );
+        userService.createUser(registerUserRequest);
     }
 
     @Test
-    @DisplayName("user조회: 성공")
+    @DisplayName("user조회 - 성공")
     void getUser_success() {
         UserResponse fakeResponse = new UserResponse(
-                User.Role.USER, 1l, "user1", "user1@email.com"
+                User.Role.MEMBER,
+                1l,
+                "user1",
+                "user1@email.com",
+                "010-1234-5678",
+                "인사과"
         );
         Mockito.when(userRepository.findUserResponseByUserEmail(Mockito.anyString())).thenReturn(Optional.of(fakeResponse));
 
@@ -99,7 +109,7 @@ class UserServiceImplTest {
         Assertions.assertAll(
                 () -> {
                     Assertions.assertNotNull(userResponse.getUserNo());
-                    Assertions.assertEquals(User.Role.USER, userResponse.getUserRole());
+                    Assertions.assertEquals(User.Role.MEMBER, userResponse.getUserRole());
                     Assertions.assertEquals("user1", userResponse.getUserName());
                     Assertions.assertEquals("user1@email.com", userResponse.getUserEmail());
                 }
@@ -108,7 +118,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("user조회: 실패")
+    @DisplayName("user조회 - 실패")
     void getUser_fail() {
 
         // 빈 Optional을 주면 에러 발생
@@ -124,34 +134,29 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("로그인_성공")
+    @DisplayName("로그인 성공")
     void loginUser_success() {
-
-        UserResponse fakeResponse = new UserResponse(
-                User.Role.USER, 1l, "user1", "user1@email.com"
+        User fakeUser = User.ofNewMember(
+                "testUser",
+                "user1@email.com",
+                passwordEncoder.encode("user12345?"),
+                "010-1234-5678",
+                "인사과"
         );
         UserLoginRequest loginRequest = new UserLoginRequest(
                 "user1@email.com",
                 "user12345?"
         );
 
-        Mockito.when(userRepository.findUserResponseByUserEmail(Mockito.anyString())).thenReturn(Optional.of(fakeResponse));
-        UserResponse userResponse = userService.loginUser(loginRequest);
+        Mockito.when(userRepository.findByUserEmail(Mockito.anyString())).thenReturn(Optional.of(fakeUser));
+        userService.loginUser(loginRequest);
 
-        Mockito.verify(userRepository, Mockito.times(1)).findUserResponseByUserEmail(Mockito.anyString());
-        Assertions.assertAll(
-                () -> {
-                    Assertions.assertNotNull(userResponse.getUserNo());
-                    Assertions.assertEquals(User.Role.USER, userResponse.getUserRole());
-                    Assertions.assertEquals("user1", userResponse.getUserName());
-                    Assertions.assertEquals("user1@email.com", userResponse.getUserEmail());
-                }
-        );
+        Mockito.verify(userRepository, Mockito.times(1)).findByUserEmail(Mockito.anyString());
     }
 
     @Test
-    @DisplayName("로그인_실패")
-    void loginUser_fail() {
+    @DisplayName("로그인 실패 - 이메일에 맞는 유저가 없음")
+    void loginUser_exception1() {
 
         UserLoginRequest loginRequest = new UserLoginRequest(
                 "",
@@ -165,6 +170,27 @@ class UserServiceImplTest {
             userService.loginUser(loginRequest);
         });
 
-        Mockito.verify(userRepository, Mockito.times(1)).findUserResponseByUserEmail(Mockito.anyString());
+        Mockito.verify(userRepository, Mockito.never()).findUserResponseByUserEmail(Mockito.anyString());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 비밀번호 불일치")
+    void loginUser_exception2() {
+        User fakeUser = User.ofNewMember(
+                "testUser",
+                "user1@email.com",
+                passwordEncoder.encode("testUser12345?"),
+                "010-1234-5678",
+                "인사과"
+        );
+        UserLoginRequest loginRequest = new UserLoginRequest(
+                "user1@email.com",
+                "user12345?"
+        );
+
+        Mockito.when(userRepository.findByUserEmail(Mockito.anyString())).thenReturn(Optional.of(fakeUser));
+        Assertions.assertThrows(UnauthorizedException.class, () -> userService.loginUser(loginRequest));
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByUserEmail(Mockito.anyString());
     }
 }

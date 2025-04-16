@@ -31,10 +31,12 @@ class CustomUserRepositoryTest {
      * @return 저장된 User 엔티티
      */
     User settingUser(){
-        User user = User.ofNewUser(
+        User user = User.ofNewMember(
                 "user",
                 "user@email.com",
-                "userPassword"
+                "userPassword",
+                "010-1234-5678",
+                "인사과"
         );
 
         return userRepository.save(user);
@@ -57,7 +59,7 @@ class CustomUserRepositoryTest {
 
         Assertions.assertAll(
                 ()->{
-                    Assertions.assertEquals(User.Role.USER, response.getUserRole());
+                    Assertions.assertEquals(User.Role.MEMBER, response.getUserRole());
                     Assertions.assertEquals("user@email.com", response.getUserEmail());
                     Assertions.assertEquals("user", response.getUserName());
                     Assertions.assertEquals(user.getUserNo(), response.getUserNo());
@@ -82,7 +84,7 @@ class CustomUserRepositoryTest {
 
         Assertions.assertAll(
                 ()->{
-                    Assertions.assertEquals(User.Role.USER, response.getUserRole());
+                    Assertions.assertEquals(User.Role.MEMBER, response.getUserRole());
                     Assertions.assertEquals("user@email.com", response.getUserEmail());
                     Assertions.assertEquals("user", response.getUserName());
                     Assertions.assertEquals(user.getUserNo(), response.getUserNo());

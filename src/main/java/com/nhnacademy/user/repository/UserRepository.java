@@ -3,6 +3,8 @@ package com.nhnacademy.user.repository;
 import com.nhnacademy.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  * User 엔티티에 대한 데이터 접근을 담당하는 리포지토리 인터페이스입니다.
  * <p>
@@ -18,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long>, CustomUserRep
      * @return 존재하면 true, 그렇지 않으면 false
      */
     boolean existsByUserEmail(String userEmail);
+
+    Optional<User> findByUserEmail(String userEmail);
 }

@@ -1,6 +1,7 @@
 package com.nhnacademy.user.service;
 
 
+import com.nhnacademy.user.dto.ChangePasswordRequest;
 import com.nhnacademy.user.dto.UserLoginRequest;
 import com.nhnacademy.user.dto.UserRegisterRequest;
 import com.nhnacademy.user.dto.UserResponse;
@@ -18,7 +19,7 @@ public interface UserService {
      * @param userRegisterRequest 사용자 등록 요청 DTO
      * @return 등록된 사용자 정보 DTO
      */
-    UserResponse createUser(UserRegisterRequest userRegisterRequest);
+    void createUser(UserRegisterRequest userRegisterRequest);
 
     /**
      * 사용자 번호로 사용자 정보를 조회합니다.
@@ -34,5 +35,7 @@ public interface UserService {
      * @param userLoginRequest 로그인 요청 DTO
      * @return 사용자 정보 DTO
      */
-    UserResponse loginUser(UserLoginRequest userLoginRequest);
+    void loginUser(UserLoginRequest userLoginRequest);
+
+    void changePassword(String userEmail, ChangePasswordRequest changePasswordRequest);
 }

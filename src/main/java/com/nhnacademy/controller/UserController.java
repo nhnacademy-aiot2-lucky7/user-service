@@ -1,12 +1,10 @@
 package com.nhnacademy.controller;
 
+import com.nhnacademy.user.dto.ChangePasswordRequest;
 import com.nhnacademy.user.dto.UserLoginRequest;
 import com.nhnacademy.user.dto.UserRegisterRequest;
-import com.nhnacademy.user.dto.UserResponse;
 import com.nhnacademy.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,8 +37,8 @@ public class UserController {
      */
     @PostMapping("/signUp")
     public ResponseEntity<Void> createAction(@Validated @RequestBody UserRegisterRequest userRegisterRequest){
-        UserResponse userResponse = userService.createUser(userRegisterRequest);
-        log.info("create response:{}", userResponse);
+        userService.createUser(userRegisterRequest);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
@@ -54,8 +52,17 @@ public class UserController {
      */
     @PostMapping("/signIn")
     public ResponseEntity<Void> loginAction(@Validated @RequestBody UserLoginRequest userLoginRequest){
-        UserResponse userResponse = userService.loginUser(userLoginRequest);
-        log.info("login response:{}", userResponse);
+        userService.loginUser(userLoginRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PutMapping("/changePassword")
+    public ResponseEntity<Void> changePassword(@RequestHeader("X-User-Id") String userEmail, @Validated @RequestBody ChangePasswordRequest changePasswordRequest) {
+        userService.changePassword(userEmail, changePasswordRequest);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
