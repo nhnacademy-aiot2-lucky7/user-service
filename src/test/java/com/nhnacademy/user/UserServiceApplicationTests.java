@@ -1,4 +1,4 @@
-package com.nhnacademy.userservice;
+package com.nhnacademy.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
