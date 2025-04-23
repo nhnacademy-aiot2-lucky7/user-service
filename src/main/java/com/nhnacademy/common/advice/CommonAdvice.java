@@ -76,7 +76,7 @@ public class CommonAdvice {
      */
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<String> exceptionHandler(Throwable e){
-        log.error("Unhandled exception occurred", e);
+        log.error("Internal Server Error: {}", e.getMessage(), e);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
