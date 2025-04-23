@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long>, CustomUserRep
      * @param userEmail 사용자 이메일
      * @return 존재하면 true, 그렇지 않으면 false
      */
-    boolean existsByUserEmail(String userEmail);
+    boolean existsByUserEmailAndWithdrawalAtIsNull(String userEmail);
 
-    Optional<User> findByUserEmail(String userEmail);
+    Optional<User> findByUserEmailAndWithdrawalAtIsNull(String userEmail);
 }

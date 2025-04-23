@@ -2,12 +2,10 @@ package com.nhnacademy.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@NoArgsConstructor
-@EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
 public class UserRegisterRequest {
 
@@ -40,12 +38,4 @@ public class UserRegisterRequest {
     @NotBlank(message = "부서명은 필수 입력 항목입니다.")
     @Size(max = 45, message = "부서명은 최대 45자까지 입력할 수 있습니다.")
     private String userDepartment;
-
-    public UserRegisterRequest(String userName, String userEmail, String userPassword, String userPhone, String userDepartment) {
-        this.userName = userName;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-        this.userPhone = userPhone;
-        this.userDepartment = userDepartment;
-    }
 }

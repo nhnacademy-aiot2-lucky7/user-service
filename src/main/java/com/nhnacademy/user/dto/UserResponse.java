@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class UserResponse {
 
     @JsonProperty("userRole")
-    User.Role userRole;
+    String userRole;
 
     @JsonProperty("userNo")
     Long userNo;
@@ -27,7 +27,7 @@ public class UserResponse {
     @JsonProperty("userDepartment")
     String userDepartment;
 
-    public UserResponse(User.Role userRole, Long userNo, String userName, String userEmail, String userPhone, String userDepartment) {
+    public UserResponse(String userRole, Long userNo, String userName, String userEmail, String userPhone, String userDepartment) {
         this.userRole = userRole;
         this.userNo = userNo;
         this.userName = userName;
@@ -41,12 +41,12 @@ public class UserResponse {
      */
     public static UserResponse from(User user) {
         return new UserResponse(
-                user.getUserRole(),
+                user.getRole().getRoleName(),
                 user.getUserNo(),
                 user.getUserName(),
                 user.getUserEmail(),
                 user.getUserPhone(),
-                user.getUserDepartment()
+                user.getDepartment().getDepartmentId()
         );
     }
 }

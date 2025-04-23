@@ -23,7 +23,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2022.0.0</version> <!-- Spring Cloud 버전 -->
+                <version>2024.0.1</version> <!-- Spring Cloud 버전 -->
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -113,6 +113,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.common</groupId>
+            <artifactId>aes-lib</artifactId>
+            <version>1.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -165,4 +171,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>github-packages</id>
+            <url>https://maven.pkg.github.com/nhnacademy-aiot2-lucky7/common-utils</url>
+        </repository>
+    </repositories>
 </project>
