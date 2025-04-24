@@ -49,8 +49,8 @@ public interface UserService {
      * 비밀번호 변경 요청을 처리하고, 변경된 비밀번호로 업데이트합니다.
      * </p>
      *
-     * @param userEmail              사용자 이메일
-     * @param changePasswordRequest  비밀번호 변경 요청 DTO
+     * @param userEmail             사용자 이메일
+     * @param changePasswordRequest 비밀번호 변경 요청 DTO
      */
     void changePassword(String userEmail, ChangePasswordRequest changePasswordRequest);
 
@@ -70,10 +70,20 @@ public interface UserService {
      * 사용자 이메일을 기반으로 해당 사용자의 정보를 수정합니다.
      * </p>
      *
-     * @param userEmail           사용자 이메일
-     * @param userUpdateRequest   사용자 정보 업데이트 요청 DTO
+     * @param userEmail         사용자 이메일
+     * @param userUpdateRequest 사용자 정보 업데이트 요청 DTO
      */
     void updateUser(String userEmail, UserUpdateRequest userUpdateRequest);
+
+    /**
+     * 사용자 역할을 업데이트합니다.
+     * <p>
+     * 사용자 ID를 기반으로 해당 사용자의 역할을 변경합니다.
+     * </p>
+     *
+     * @param userRoleUpdateRequest 역할 업데이트 요청 DTO
+     */
+    void updateUserRole(UserRoleUpdateRequest userRoleUpdateRequest);
 
     /**
      * 모든 사용자 정보를 조회합니다.

@@ -23,4 +23,8 @@ public class Image {
     public Image(String imagePath) {
         this.imagePath = imagePath;
     }
+
+    public void updateImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }

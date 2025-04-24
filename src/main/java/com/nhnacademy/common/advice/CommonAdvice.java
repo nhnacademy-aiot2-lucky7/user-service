@@ -29,12 +29,12 @@ public class CommonAdvice {
      * @return 400 Bad Request와 함께 상세 필드 에러 메시지를 포함한 응답
      */
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<String> bindExceptionHandler(BindException e){
+    public ResponseEntity<String> bindExceptionHandler(BindException e) {
         log.warn("BindException 발생: {}", e.getMessage());
 
         StringBuilder errorMessage = new StringBuilder("Bad Request: ");
 
-        for(FieldError fieldError: e.getFieldErrors()){
+        for (FieldError fieldError : e.getFieldErrors()) {
             errorMessage.append(fieldError.getField())
                     .append(" - ")
                     .append(fieldError.getDefaultMessage())
@@ -56,7 +56,7 @@ public class CommonAdvice {
      * @return 정의된 상태 코드와 함께 메시지를 포함한 응답
      */
     @ExceptionHandler(CommonHttpException.class)
-    public ResponseEntity<String> commonExceptionHandler(CommonHttpException e){
+    public ResponseEntity<String> commonExceptionHandler(CommonHttpException e) {
         log.warn("CommonHttpException 발생: {}", e.getMessage());
 
         return ResponseEntity
@@ -75,11 +75,11 @@ public class CommonAdvice {
      * @return 500 Internal Server Error 응답
      */
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<String> exceptionHandler(Throwable e){
+    public ResponseEntity<String> exceptionHandler(Throwable e) {
         log.error("Internal Server Error: {}", e.getMessage(), e);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Internal Server Error 발생");
+                .body("서버에서 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
 }
