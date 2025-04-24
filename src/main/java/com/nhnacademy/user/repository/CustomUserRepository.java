@@ -14,37 +14,27 @@ import java.util.Optional;
 public interface CustomUserRepository {
 
     /**
-     * 사용자 번호(userNo)를 기반으로 사용자 정보를 조회합니다.
+     * 사용자 이메일을 기반으로 사용자 정보를 조회합니다.
      * <p>
-     * 사용자 번호에 해당하는 정보를 조회하여 {@link UserResponse} 객체로 반환합니다.
-     * 사용자가 존재하지 않을 경우 {@link Optional#empty()}를 반환합니다.
+     * 주어진 사용자 이메일에 해당하는 정보를 조회하여 {@link UserResponse} 객체로 반환합니다.
+     * 사용자가 존재하지 않으면 {@link Optional#empty()}를 반환합니다.
      * </p>
      *
-     * @param userNo 사용자 번호
-     * @return 조회된 사용자 정보를 담은 {@link UserResponse}, 존재하지 않을 경우 Optional.empty()
-     */
-    Optional<UserResponse> findUserResponseByUserNo(Long userNo);
-
-    /**
-     * 사용자 이메일(userEmail)을 기반으로 사용자 정보를 조회합니다.
-     * <p>
-     * 사용자 이메일에 해당하는 정보를 조회하여 {@link UserResponse} 객체로 반환합니다.
-     * 사용자가 존재하지 않을 경우 {@link Optional#empty()}를 반환합니다.
-     * </p>
-     *
-     * @param userEmail 사용자 이메일
-     * @return 조회된 사용자 정보를 담은 {@link UserResponse}, 존재하지 않을 경우 Optional.empty()
+     * @param userEmail 조회할 사용자 이메일
+     * @return 사용자 이메일에 해당하는 {@link UserResponse} 객체를 {@link Optional}로 반환,
+     * 사용자가 존재하지 않으면 {@link Optional#empty()}를 반환
      */
     Optional<UserResponse> findUserResponseByUserEmail(String userEmail);
 
     /**
-     * 모든 사용자 정보를 조회합니다.
+     * 시스템에 존재하는 모든 사용자 정보를 조회합니다.
      * <p>
-     * 시스템에 존재하는 모든 사용자 정보를 {@link List} 형태로 반환합니다.
-     * 사용자가 존재하지 않을 경우 {@link Optional#empty()}를 반환합니다.
+     * 모든 사용자 정보를 조회하여 {@link List<UserResponse>} 형태로 반환합니다.
+     * 사용자가 존재하지 않으면 {@link Optional#empty()}를 반환합니다.
      * </p>
      *
-     * @return 모든 사용자 정보를 담은 {@link List<UserResponse>}, 존재하지 않을 경우 Optional.empty()
+     * @return 시스템에 존재하는 모든 사용자 정보가 담긴 {@link List<UserResponse>}를 {@link Optional}로 반환,
+     * 사용자가 존재하지 않으면 {@link Optional#empty()}를 반환
      */
     Optional<List<UserResponse>> findAllUserResponse();
 }

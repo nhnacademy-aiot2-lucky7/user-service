@@ -1,7 +1,7 @@
 package com.nhnacademy.user.repository.impl;
 
-import com.nhnacademy.user.domain.User;
 import com.nhnacademy.user.domain.QUser;
+import com.nhnacademy.user.domain.User;
 import com.nhnacademy.user.dto.UserResponse;
 import com.nhnacademy.user.repository.CustomUserRepository;
 import com.querydsl.core.types.Projections;
@@ -18,37 +18,6 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
      */
     public CustomUserRepositoryImpl() {
         super(User.class);
-    }
-
-    /**
-     * 사용자 번호(userNo)를 기준으로 사용자 정보를 조회합니다.
-     * <p>
-     * 사용자 번호에 해당하는 정보를 조회하여 {@link UserResponse} 객체로 반환합니다.
-     * 사용자가 존재하지 않을 경우 {@link Optional#empty()}를 반환합니다.
-     * </p>
-     *
-     * @param userNo 사용자 번호
-     * @return 조회된 사용자 정보를 담은 {@link UserResponse}, 존재하지 않을 경우 Optional.empty()
-     */
-    @Override
-    public Optional<UserResponse> findUserResponseByUserNo(Long userNo) {
-        JPAQuery<UserResponse> query = new JPAQuery<>(getEntityManager());
-        QUser qUser = QUser.user;
-
-        return Optional.ofNullable(query
-                .select(Projections.constructor(
-                        UserResponse.class,
-                        qUser.role.roleId,
-                        qUser.userNo,
-                        qUser.userName,
-                        qUser.userEmail,
-                        qUser.userPhone,
-                        qUser.department
-                ))
-                .from(qUser)
-                .where(qUser.userNo.eq(userNo)
-                        .and(qUser.withdrawalAt.isNull()))
-                .fetchOne());
     }
 
     /**

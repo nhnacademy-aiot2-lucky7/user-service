@@ -5,7 +5,6 @@ import com.nhnacademy.common.exception.NotFoundException;
 import com.nhnacademy.common.exception.UnauthorizedException;
 import com.nhnacademy.department.domain.Department;
 import com.nhnacademy.department.repository.DepartmentRepository;
-import com.nhnacademy.image.repository.ImageRepository;
 import com.nhnacademy.role.domain.Role;
 import com.nhnacademy.role.repository.RoleRepository;
 import com.nhnacademy.user.domain.User;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 사용자 관련 비즈니스 로직을 처리하는 서비스 구현체입니다.
@@ -37,7 +35,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final DepartmentRepository departmentRepository;
-    private final ImageRepository imageRepository;
 
     /**
      * 새로운 사용자를 등록합니다.
@@ -71,7 +68,7 @@ public class UserServiceImpl implements UserService {
                 department
         );
 
-        if(!roleRepository.existsById(user.getRole().getRoleId())) {
+        if (!roleRepository.existsById(user.getRole().getRoleId())) {
             throw new NotFoundException("존재하지 않는 권한입니다.");
         }
 
@@ -119,7 +116,7 @@ public class UserServiceImpl implements UserService {
      * </p>
      *
      * @param userLoginRequest 로그인 요청 DTO
-     * @throws NotFoundException 이메일에 해당하는 사용자가 없을 경우
+     * @throws NotFoundException     이메일에 해당하는 사용자가 없을 경우
      * @throws UnauthorizedException 비밀번호 불일치 시
      */
     @Transactional(readOnly = true)
@@ -129,7 +126,7 @@ public class UserServiceImpl implements UserService {
         User getUser = userRepository.findByUserEmailAndWithdrawalAtIsNull(userLoginRequest.getUserEmail())
                 .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는 유저를 찾을 수 없습니다."));
 
-        if(!passwordEncoder.matches(userLoginRequest.getUserPassword(), getUser.getUserPassword())) {
+        if (!passwordEncoder.matches(userLoginRequest.getUserPassword(), getUser.getUserPassword())) {
             throw new UnauthorizedException("비밀번호 불일치");
         }
     }
@@ -140,9 +137,9 @@ public class UserServiceImpl implements UserService {
      * 비밀번호가 일치하지 않으면 {@link UnauthorizedException}을 발생시킵니다.
      * </p>
      *
-     * @param userEmail 사용자 이메일
+     * @param userEmail             사용자 이메일
      * @param changePasswordRequest 비밀번호 변경 요청 DTO
-     * @throws NotFoundException 사용자가 존재하지 않을 경우
+     * @throws NotFoundException     사용자가 존재하지 않을 경우
      * @throws UnauthorizedException 비밀번호 불일치 또는 확인 비밀번호 불일치 시
      */
     @Override
@@ -150,11 +147,11 @@ public class UserServiceImpl implements UserService {
         User getUser = userRepository.findByUserEmailAndWithdrawalAtIsNull(userEmail)
                 .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는 유저를 찾을 수 없습니다."));
 
-        if(!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), getUser.getUserPassword())) {
+        if (!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), getUser.getUserPassword())) {
             throw new UnauthorizedException("비밀번호 불일치");
         }
 
-        if(!changePasswordRequest.isPasswordConfirmed()) {
+        if (!changePasswordRequest.isPasswordConfirmed()) {
             throw new UnauthorizedException("확인 패스워드 불일치");
         }
 
@@ -168,14 +165,14 @@ public class UserServiceImpl implements UserService {
      * 존재하지 않는 부서인 경우 {@link NotFoundException}을 발생시킵니다.
      * </p>
      *
-     * @param userEmail 사용자 이메일
+     * @param userEmail         사용자 이메일
      * @param userUpdateRequest 사용자 정보 수정 요청 DTO
      * @throws NotFoundException 사용자가 존재하지 않거나 부서가 존재하지 않을 경우
      */
     @Override
     public void updateUser(String userEmail, UserUpdateRequest userUpdateRequest) {
         User getUser = userRepository.findByUserEmailAndWithdrawalAtIsNull(userEmail)
-                .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는  유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는 유저를 찾을 수 없습니다."));
 
         Department department = departmentRepository.findById(userUpdateRequest.getUserDepartmentId())
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 부서입니다."));
@@ -185,6 +182,28 @@ public class UserServiceImpl implements UserService {
                 userUpdateRequest.getUserPhone(),
                 department
         );
+
+        userRepository.save(getUser);
+    }
+
+    /**
+     * 사용자의 역할을 업데이트합니다.
+     * <p>
+     * 역할이 존재하지 않으면 {@link NotFoundException}을 발생시킵니다.
+     * </p>
+     *
+     * @param userRoleUpdateRequest 역할 업데이트 요청 DTO
+     * @throws NotFoundException 역할이 존재하지 않을 경우
+     */
+    @Override
+    public void updateUserRole(UserRoleUpdateRequest userRoleUpdateRequest) {
+        User getUser = userRepository.findByUserEmailAndWithdrawalAtIsNull(userRoleUpdateRequest.getUserId())
+                .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는 유저를 찾을 수 없습니다."));
+
+        Role role = roleRepository.findById(userRoleUpdateRequest.getRoleId())
+                .orElseThrow(() -> new NotFoundException("해당 RoleId의 권한 찾을 수 없습니다."));
+
+        getUser.changeRole(role);
 
         userRepository.save(getUser);
     }
