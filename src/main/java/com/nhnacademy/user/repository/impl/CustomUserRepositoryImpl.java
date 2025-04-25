@@ -43,7 +43,7 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                         qUser.userName,
                         qUser.userEmail,
                         qUser.userPhone,
-                        qUser.department
+                        qUser.department.departmentId
                 ))
                 .from(qUser)
                 .where(qUser.userEmail.eq(userEmail)
@@ -73,7 +73,7 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                         qUser.userName,
                         qUser.userEmail,
                         qUser.userPhone,
-                        qUser.department
+                        qUser.department.departmentId
                 ))
                 .from(qUser)
                 .where(qUser.withdrawalAt.isNull())

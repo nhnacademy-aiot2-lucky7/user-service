@@ -1,4 +1,4 @@
-package com.nhnacademy.user.common.dto;
+package com.nhnacademy.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
