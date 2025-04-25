@@ -1,8 +1,8 @@
-package com.nhnacademy.user.common.config;
+package com.nhnacademy.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.user.common.dto.AppInfo;
-import com.nhnacademy.user.common.dto.InfoResponse;
+import com.nhnacademy.common.dto.AppInfo;
+import com.nhnacademy.common.dto.InfoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,5 @@
 package com.nhnacademy.user.domain;
+
 import com.nhnacademy.department.domain.Department;
 import com.nhnacademy.image.domain.Image;
 import com.nhnacademy.role.domain.Role;
@@ -47,7 +48,7 @@ public class User {
     @Column(name = "withdrawalAt")
     private LocalDateTime withdrawalAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -55,12 +56,12 @@ public class User {
     @JoinColumn(name = "image_no")
     private Image profileImage;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     private User(String userName, String userEmail, String userPassword,
-                String userPhone,Department department, Role role) {
+                 String userPhone, Department department, Role role) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
@@ -70,7 +71,7 @@ public class User {
     }
 
     public static User ofNewMember(String userName, String userEmail, String userPassword,
-                            String userPhone, Department department) {
+                                   String userPhone, Department department) {
         return new User(
                 userName,
                 userEmail,

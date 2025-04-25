@@ -151,10 +151,6 @@ public class UserServiceImpl implements UserService {
             throw new UnauthorizedException("비밀번호 불일치");
         }
 
-        if (!changePasswordRequest.isPasswordConfirmed()) {
-            throw new UnauthorizedException("확인 패스워드 불일치");
-        }
-
         getUser.changePassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
         userRepository.save(getUser);
     }
@@ -187,13 +183,13 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 사용자의 역할을 업데이트합니다.
+     * 사용자의 권한을 업데이트합니다.
      * <p>
-     * 역할이 존재하지 않으면 {@link NotFoundException}을 발생시킵니다.
+     * 권한이 존재하지 않으면 {@link NotFoundException}을 발생시킵니다.
      * </p>
      *
-     * @param userRoleUpdateRequest 역할 업데이트 요청 DTO
-     * @throws NotFoundException 역할이 존재하지 않을 경우
+     * @param userRoleUpdateRequest 권한 업데이트 요청 DTO
+     * @throws NotFoundException 권한이 존재하지 않을 경우
      */
     @Override
     public void updateUserRole(UserRoleUpdateRequest userRoleUpdateRequest) {

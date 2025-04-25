@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
  * 이메일과 비밀번호를 받아 로그인 검증에 사용됩니다.
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
 public class UserLoginRequest {
 
@@ -36,15 +38,4 @@ public class UserLoginRequest {
     @JsonProperty("userPassword")
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{6,20}")
     String userPassword;
-
-    /**
-     * 생성자 - 이메일과 비밀번호를 지정하여 객체를 생성합니다.
-     *
-     * @param userEmail    사용자 이메일
-     * @param userPassword 사용자 비밀번호
-     */
-    public UserLoginRequest(String userEmail, String userPassword) {
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-    }
 }

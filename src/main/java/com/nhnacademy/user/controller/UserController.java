@@ -1,6 +1,7 @@
 package com.nhnacademy.user.controller;
 
 import com.common.AESUtil;
+import com.nhnacademy.common.exception.BadRequestException;
 import com.nhnacademy.user.dto.*;
 import com.nhnacademy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -89,6 +90,10 @@ public class UserController {
     @PutMapping("/me/password")
     public ResponseEntity<Void> changePassword(@RequestHeader("X-User-Id") String encryptedEmail,
                                                @Validated @RequestBody ChangePasswordRequest changePasswordRequest) {
+        if (!changePasswordRequest.isPasswordConfirmed()) {
+            throw new BadRequestException("확인 패스워드 불일치");
+        }
+
         userService.changePassword(aesUtil.decrypt(encryptedEmail), changePasswordRequest);
 
         return ResponseEntity

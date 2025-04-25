@@ -1,7 +1,7 @@
-package com.nhnacademy.user.common.config;
+package com.nhnacademy.common.config;
 
-import com.nhnacademy.user.common.dto.AppInfo;
-import com.nhnacademy.user.common.dto.InfoResponse;
+import com.nhnacademy.common.dto.AppInfo;
+import com.nhnacademy.common.dto.InfoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.context.annotation.Bean;
