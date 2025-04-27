@@ -21,4 +21,8 @@ public class Role {
 
     @Column(name = "role_name", length = 100, nullable = false)
     private String roleName;
+
+    public void updateRoleName(String updateRoleName) {
+        this.roleName = updateRoleName;
+    }
 }

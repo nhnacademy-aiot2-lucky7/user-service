@@ -25,7 +25,7 @@ public class UserController {
      * @param userRegisterRequest 사용자 등록 정보 (이메일, 비밀번호 등)
      * @return 201 CREATED 응답
      */
-    @PostMapping("auth/signUp")
+    @PostMapping("/auth/signUp")
     public ResponseEntity<Void> signUp(@Validated @RequestBody UserRegisterRequest userRegisterRequest) {
         userService.createUser(userRegisterRequest);
 

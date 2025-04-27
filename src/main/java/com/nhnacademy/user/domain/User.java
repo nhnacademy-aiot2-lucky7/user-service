@@ -4,7 +4,10 @@ import com.nhnacademy.department.domain.Department;
 import com.nhnacademy.image.domain.Image;
 import com.nhnacademy.role.domain.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
@@ -14,7 +17,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 public class User {
 
     @Id

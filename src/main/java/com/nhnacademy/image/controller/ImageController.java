@@ -1,9 +1,8 @@
 package com.nhnacademy.image.controller;
 
 import com.nhnacademy.image.dto.ImageResponse;
-import com.nhnacademy.image.service.impl.ImageServiceImpl;
+import com.nhnacademy.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/images")
 @RequiredArgsConstructor
-@Slf4j
 public class ImageController {
-    private final ImageServiceImpl imageService;
+    private final ImageService imageService;
 
     /**
      * 사용자의 프로필 이미지를 조회합니다.

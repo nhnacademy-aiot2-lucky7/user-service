@@ -68,10 +68,6 @@ public class UserServiceImpl implements UserService {
                 department
         );
 
-        if (!roleRepository.existsById(user.getRole().getRoleId())) {
-            throw new NotFoundException("존재하지 않는 권한입니다.");
-        }
-
         userRepository.save(user);
     }
 
