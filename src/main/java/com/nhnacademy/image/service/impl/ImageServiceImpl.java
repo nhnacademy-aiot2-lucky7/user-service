@@ -58,7 +58,7 @@ public class ImageServiceImpl implements ImageService {
 
         Image profileImage = user.getProfileImage();
         if (Objects.isNull(profileImage)) {
-            throw new NotFoundException("해당 유저의 프로필 이미지가 등록되어 있지 않습니다.");
+            throw new NotFoundException("등록된 프로필 이미지가 없습니다. 이미지를 먼저 설정해 주세요.");
         }
 
         imageRepository.deleteById(profileImage.getImageNo());

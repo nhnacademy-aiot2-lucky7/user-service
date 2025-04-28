@@ -6,6 +6,7 @@ import com.nhnacademy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class AdminController {
      * @return 204 No Content 응답
      */
     @PutMapping("/roles")
-    public ResponseEntity<Void> updateUserRole(UserRoleUpdateRequest roleUpdateRequest) {
+    public ResponseEntity<Void> updateUserRole(@Validated @RequestBody UserRoleUpdateRequest roleUpdateRequest) {
         userService.updateUserRole(roleUpdateRequest);
 
         return ResponseEntity
@@ -70,6 +71,7 @@ public class AdminController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserByAdmin(@PathVariable String userId) {
         userService.deleteUser(userId);
+        
         return ResponseEntity
                 .noContent()
                 .build();

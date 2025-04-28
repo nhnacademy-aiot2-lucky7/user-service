@@ -21,4 +21,8 @@ public class Department {
 
     @Column(name = "department_name", length = 100, nullable = false)
     private String departmentName;
+
+    public void updateDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 }

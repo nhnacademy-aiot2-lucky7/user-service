@@ -7,7 +7,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,17 +38,6 @@ class AdminAuthorizationFilterTest {
 
     @InjectMocks
     AdminAuthorizationFilter filter;
-
-    @BeforeEach
-    void setUp() {
-        aesUtil = mock(AESUtil.class);
-        userService = mock(UserService.class);
-        filter = new AdminAuthorizationFilter(aesUtil, userService);
-
-        request = mock(HttpServletRequest.class);
-        response = mock(HttpServletResponse.class);
-        chain = mock(FilterChain.class);
-    }
 
     @Test
     @DisplayName("정상적인 관리자 접근 - 필터 통과")

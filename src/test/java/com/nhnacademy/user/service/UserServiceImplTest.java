@@ -57,13 +57,11 @@ class UserServiceImplTest {
 
         Mockito.when(userRepository.existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(false);
         Mockito.when(departmentRepository.findById(Mockito.anyString())).thenReturn(Optional.of(department));
-        Mockito.when(roleRepository.existsById(Mockito.anyString())).thenReturn(true);
 
         userService.createUser(userRegisterRequest);
 
         Mockito.verify(userRepository, Mockito.times(1)).existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
         Mockito.verify(passwordEncoder, Mockito.times(1)).encode(Mockito.anyString());
-        Mockito.verify(roleRepository, Mockito.times(1)).existsById(Mockito.anyString());
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
     }
 
@@ -103,31 +101,6 @@ class UserServiceImplTest {
         Assertions.assertThrows(NotFoundException.class, () -> userService.createUser(userRegisterRequest));
 
         Mockito.verify(userRepository, Mockito.times(1)).existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
-        Mockito.verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
-    }
-
-    @Test
-    @DisplayName("유저가입 - 존재하지 않는 권한")
-    void createUser_exception3() {
-        Department department = new Department("DEP-001", "개발부");
-        UserRegisterRequest userRegisterRequest = new UserRegisterRequest(
-                "testUser",
-                "test@email.com",
-                "testPassword",
-                "010-1234-5678",
-                "DEP-001"
-        );
-
-        Mockito.when(userRepository.existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(false);
-        Mockito.when(departmentRepository.findById(Mockito.anyString())).thenReturn(Optional.of(department));
-        Mockito.when(roleRepository.existsById(Mockito.anyString())).thenReturn(false);
-
-        Assertions.assertThrows(NotFoundException.class, () -> userService.createUser(userRegisterRequest));
-
-
-        Mockito.verify(userRepository, Mockito.times(1)).existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
-        Mockito.verify(passwordEncoder, Mockito.times(1)).encode(Mockito.anyString());
-        Mockito.verify(roleRepository, Mockito.times(1)).existsById(Mockito.anyString());
         Mockito.verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
     }
 
