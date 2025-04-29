@@ -84,4 +84,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
-          script: startup/authServiceStartup.sh
+          script: startup/userServiceStartup.sh
