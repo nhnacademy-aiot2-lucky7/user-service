@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
+@AutoConfigureRestDocs
 class IntegrationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -112,7 +115,7 @@ class IntegrationTest {
     }
 
     @Test
-    @DisplayName("회원 가입 - 201반환")
+    @DisplayName("회원 가입 - 201 반환")
     void signUp_201() throws Exception {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest(
                 "testUser",
@@ -125,16 +128,17 @@ class IntegrationTest {
         mockMvc.perform(post("/users/auth/signUp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userRegisterRequest)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("signup-success-201"));
     }
 
     @Test
-    @DisplayName("회원 가입 - validate 검증으로 인한 400반환")
+    @DisplayName("회원 가입 - validate 검증으로 인한 400 반환")
     void signUp_400() throws Exception {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest(
                 "testUser",
                 "test@email.com",
-                "Passw0rd",
+                "Passw0rd",  // 비밀번호 규칙 위반
                 "010-1234-5678",
                 "dept1"
         );
@@ -142,11 +146,12 @@ class IntegrationTest {
         mockMvc.perform(post("/users/auth/signUp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userRegisterRequest)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andDo(document("signup-fail-validation-400"));
     }
 
     @Test
-    @DisplayName("회원 가입 - 이메일 중복으로 인한 409반환")
+    @DisplayName("회원 가입 - 이메일 중복으로 인한 409 반환")
     void signUp_409() throws Exception {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest(
                 "testUser",
@@ -159,28 +164,30 @@ class IntegrationTest {
         mockMvc.perform(post("/users/auth/signUp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userRegisterRequest)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andDo(document("signup-fail-email-duplicate-409"));
     }
 
     @Test
-    @DisplayName("회원 가입 - 존재하지 않는 부서 404반환")
+    @DisplayName("회원 가입 - 존재하지 않는 부서 404 반환")
     void signUp_404() throws Exception {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest(
                 "testUser",
                 "test@test.com",
                 "P@ssw0rd",
                 "010-1234-5678",
-                "dept20"
+                "dept20"  // 존재하지 않는 부서
         );
 
         mockMvc.perform(post("/users/auth/signUp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userRegisterRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("signup-fail-department-not-found-404"));
     }
 
     @Test
-    @DisplayName("로그인 - 200반환")
+    @DisplayName("로그인 - 200 반환")
     void signIn_200() throws Exception {
         UserLoginRequest userLoginRequest = new UserLoginRequest(
                 "user1@test.com",
@@ -190,25 +197,27 @@ class IntegrationTest {
         mockMvc.perform(post("/users/auth/signIn")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userLoginRequest)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("signin-success-200"));
     }
 
     @Test
-    @DisplayName("로그인 - validate검증으로 인한 400반환")
+    @DisplayName("로그인 - validate 검증으로 인한 400 반환")
     void signIn_400() throws Exception {
         UserLoginRequest userLoginRequest = new UserLoginRequest(
                 "user1@test.com",
-                "Passw0rd1"
+                "Passw0rd1"  // 비밀번호 규칙 위반
         );
 
         mockMvc.perform(post("/users/auth/signIn")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userLoginRequest)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andDo(document("signin-fail-validation-400"));
     }
 
     @Test
-    @DisplayName("로그인 - 존재하지 않는 유저 404반환")
+    @DisplayName("로그인 - 존재하지 않는 유저 404 반환")
     void signIn_404() throws Exception {
         UserLoginRequest userLoginRequest = new UserLoginRequest(
                 "user20@test.com",
@@ -218,41 +227,45 @@ class IntegrationTest {
         mockMvc.perform(post("/users/auth/signIn")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userLoginRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("signin-fail-user-not-found-404"));
     }
 
     @Test
-    @DisplayName("로그인 - 비밀번호 불일치 401반환")
+    @DisplayName("로그인 - 비밀번호 불일치 401 반환")
     void signIn_401() throws Exception {
         UserLoginRequest userLoginRequest = new UserLoginRequest(
                 "user1@test.com",
-                "P@ssw0rd10"
+                "P@ssw0rd10"  // 비밀번호 불일치
         );
 
         mockMvc.perform(post("/users/auth/signIn")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userLoginRequest)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andDo(document("signin-fail-invalid-password-401"));
     }
 
     @Test
-    @DisplayName("본인 정보 조회 - 200반환")
+    @DisplayName("본인 정보 조회 - 200 반환")
     void getMyInfo_200() throws Exception {
         mockMvc.perform(get("/users/me")
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userEmail").value("user1@test.com"))
-                .andExpect(jsonPath("$.userName").value("testUser1"));
+                .andExpect(jsonPath("$.userName").value("testUser1"))
+                .andDo(document("get-my-info-200"));
     }
 
     @Test
-    @DisplayName("본인 정보 조회 - 존재하지 않는 유저 404반환")
+    @DisplayName("본인 정보 조회 - 존재하지 않는 유저 404 반환")
     void getMyInfo_404() throws Exception {
         mockMvc.perform(get("/users/me")
                         .header("X-User-Id", aesUtil.encrypt("user20@test.com"))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("get-my-info-fail-user-404-not-found"));
     }
 
     @Test
@@ -264,12 +277,12 @@ class IntegrationTest {
                 "dept1"
         );
 
-
         mockMvc.perform(put("/users/me")
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userUpdateRequest)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("update-my-info-204"));
     }
 
     @Test
@@ -281,12 +294,12 @@ class IntegrationTest {
                 "dept1"
         );
 
-
         mockMvc.perform(put("/users/me")
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userUpdateRequest)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andDo(document("update-my-info-400"));
     }
 
     @Test
@@ -298,12 +311,12 @@ class IntegrationTest {
                 "dept1"
         );
 
-
         mockMvc.perform(put("/users/me")
                         .header("X-User-Id", aesUtil.encrypt("user20@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userUpdateRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("update-my-info-404-user"));
     }
 
     @Test
@@ -315,12 +328,12 @@ class IntegrationTest {
                 "dept20"
         );
 
-
         mockMvc.perform(put("/users/me")
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userUpdateRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("update-my-info-404-department"));
     }
 
     @Test
@@ -336,7 +349,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(changePasswordRequest)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("change-password-204"));
     }
 
     @Test
@@ -352,7 +366,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(changePasswordRequest)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andDo(document("change-password-400-case1"));
     }
 
     @Test
@@ -368,7 +383,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(changePasswordRequest)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andDo(document("change-password-400-case2"));
     }
 
     @Test
@@ -384,7 +400,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("user20@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(changePasswordRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("change-password-404"));
     }
 
     @Test
@@ -400,7 +417,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(changePasswordRequest)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andDo(document("change-password-401"));
     }
 
     @Test
@@ -409,7 +427,8 @@ class IntegrationTest {
         mockMvc.perform(delete("/users/me")
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-my-account-204"));
     }
 
     @Test
@@ -418,7 +437,8 @@ class IntegrationTest {
         mockMvc.perform(delete("/users/me")
                         .header("X-User-Id", aesUtil.encrypt("user20@test.com"))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("delete-my-account-404"));
     }
 
     // -------------------------admin-------------------------
@@ -430,7 +450,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("get-all-users-200"));
     }
 
     @Test
@@ -440,7 +461,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("user1@test.com"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("get-all-users-403"));
     }
 
     @Test
@@ -451,7 +473,8 @@ class IntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userEmail").value("user2@test.com"))
-                .andExpect(jsonPath("$.userName").value("testUser2"));
+                .andExpect(jsonPath("$.userName").value("testUser2"))
+                .andDo(document("get-user-by-email-200"));
     }
 
     @Test
@@ -466,7 +489,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userRoleUpdateRequest)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("update-user-role-204"));
     }
 
     @Test
@@ -481,7 +505,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userRoleUpdateRequest)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andDo(document("update-user-role-400"));
     }
 
     @Test
@@ -496,7 +521,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userRoleUpdateRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("update-user-role-404-user"));
     }
 
     @Test
@@ -511,7 +537,8 @@ class IntegrationTest {
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userRoleUpdateRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("update-user-role-404-role"));
     }
 
     @Test
@@ -520,7 +547,8 @@ class IntegrationTest {
         mockMvc.perform(delete("/admin/users/user2@test.com")
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-user-by-admin-204"));
     }
 
     @Test
@@ -529,7 +557,8 @@ class IntegrationTest {
         mockMvc.perform(delete("/admin/users/user20@test.com")
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("delete-user-by-admin-404"));
     }
 
     // -------------------------image-------------------------
@@ -540,7 +569,8 @@ class IntegrationTest {
         mockMvc.perform(get("/images/user0@test.com")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.imagePath").value("path/to/image0.jpg"));
+                .andExpect(jsonPath("$.imagePath").value("path/to/image0.jpg"))
+                .andDo(document("get-image-200"));
     }
 
     @Test
@@ -548,7 +578,8 @@ class IntegrationTest {
     void getImage_404_case1() throws Exception {
         mockMvc.perform(get("/images/user20@test.com")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("get-image-404-user-not-found"));
     }
 
     @Test
@@ -556,7 +587,8 @@ class IntegrationTest {
     void getImage_404_case2() throws Exception {
         mockMvc.perform(get("/images/user2@test.com")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("get-image-404-image-not-found"));
     }
 
     @Test
@@ -567,7 +599,8 @@ class IntegrationTest {
                         .param("imagePath", "images/path")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("create-image-201"));
     }
 
     @Test
@@ -578,7 +611,8 @@ class IntegrationTest {
                         .param("imagePath", "images/path")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("create-image-404-user-not-found"));
     }
 
     @Test
@@ -589,7 +623,8 @@ class IntegrationTest {
                         .param("imagePath", "images/path")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("update-image-204"));
     }
 
     @Test
@@ -600,7 +635,8 @@ class IntegrationTest {
                         .param("imagePath", "images/path")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("update-image-404-user-not-found"));
     }
 
     @Test
@@ -611,7 +647,8 @@ class IntegrationTest {
                         .param("imagePath", "images/path")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("update-image-404-image-not-found"));
     }
 
     @Test
@@ -620,7 +657,8 @@ class IntegrationTest {
         mockMvc.perform(delete("/images/{userEmail}", "user0@test.com")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("delete-image-204"));
     }
 
     @Test
@@ -629,7 +667,8 @@ class IntegrationTest {
         mockMvc.perform(delete("/images/{userEmail}", "user20@test.com")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("delete-image-404-user-not-found"));
     }
 
     @Test
@@ -638,7 +677,8 @@ class IntegrationTest {
         mockMvc.perform(delete("/images/{userEmail}", "user1@test.com")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("delete-image-404-image-not-found"));
     }
 
     // -------------------------role-------------------------
@@ -649,7 +689,8 @@ class IntegrationTest {
         mockMvc.perform(get("/users/roles")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("get-all-role-200"));
     }
 
     @Test
@@ -659,7 +700,8 @@ class IntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.roleId").value("ROLE_MEMBER"))
-                .andExpect(jsonPath("$.roleName").value("일반 회원"));
+                .andExpect(jsonPath("$.roleName").value("일반 회원"))
+                .andDo(document("get-role-by-role-id-200"));
     }
 
     @Test
@@ -667,7 +709,8 @@ class IntegrationTest {
     void getRoleByRoleId_404() throws Exception {
         mockMvc.perform(get("/users/roles/ROLE_TEST")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("get-role-by-role-id-404-not-found"));
     }
 
     @Test
@@ -678,7 +721,8 @@ class IntegrationTest {
         mockMvc.perform(post("/users/roles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(roleRequest)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("create-role-201"));
     }
 
     @Test
@@ -689,7 +733,8 @@ class IntegrationTest {
         mockMvc.perform(post("/users/roles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(roleRequest)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andDo(document("create-role-409-conflict"));
     }
 
     @Test
@@ -700,7 +745,8 @@ class IntegrationTest {
         mockMvc.perform(put("/users/roles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(roleRequest)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("update-role-204"));
     }
 
     @Test
@@ -711,7 +757,8 @@ class IntegrationTest {
         mockMvc.perform(put("/users/roles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(roleRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("update-role-404-not-found"));
     }
 
     @Test
@@ -719,7 +766,8 @@ class IntegrationTest {
     void deleteRole_204() throws Exception {
         mockMvc.perform(delete("/users/roles/ROLE_MEMBER")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-role-204"));
     }
 
     @Test
@@ -727,7 +775,8 @@ class IntegrationTest {
     void deleteRole_404() throws Exception {
         mockMvc.perform(delete("/users/roles/ROLE_TEST")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("delete-role-404-not-found"));
     }
 
     // -------------------------department-------------------------
@@ -738,7 +787,8 @@ class IntegrationTest {
         mockMvc.perform(get("/users/departments")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("get-all-department-200"));
     }
 
     @Test
@@ -748,7 +798,8 @@ class IntegrationTest {
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.departmentId").value("dept1"))
-                .andExpect(jsonPath("$.departmentName").value("부서명1"));
+                .andExpect(jsonPath("$.departmentName").value("부서명1"))
+                .andDo(document("get-department-by-department-id-200"));
     }
 
     @Test
@@ -756,7 +807,8 @@ class IntegrationTest {
     void getDepartmentByDepartmentId_404() throws Exception {
         mockMvc.perform(get("/users/departments/dept10")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("get-department-by-department-id-404-not-found"));
     }
 
     @Test
@@ -767,7 +819,8 @@ class IntegrationTest {
         mockMvc.perform(post("/users/departments")
                         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(departmentRequest)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("create-department-201"));
     }
 
     @Test
@@ -778,7 +831,8 @@ class IntegrationTest {
         mockMvc.perform(post("/users/departments")
                         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(departmentRequest)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andDo(document("create-department-409-conflict"));
     }
 
     @Test
@@ -789,7 +843,8 @@ class IntegrationTest {
         mockMvc.perform(put("/users/departments")
                         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(departmentRequest)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("update-department-204"));
     }
 
     @Test
@@ -800,7 +855,8 @@ class IntegrationTest {
         mockMvc.perform(put("/users/departments")
                         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(departmentRequest)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("update-department-404-not-found"));
     }
 
     @Test
@@ -808,7 +864,8 @@ class IntegrationTest {
     void deleteDepartment_204() throws Exception {
         mockMvc.perform(delete("/users/departments/dept1")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-department-204"));
     }
 
     @Test
@@ -816,6 +873,7 @@ class IntegrationTest {
     void deleteDepartment_409() throws Exception {
         mockMvc.perform(delete("/users/departments/testDept")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(document("delete-department-404-not-found"));
     }
 }
