@@ -25,7 +25,6 @@ jobs:
       # 3. AES secrets를 환경 변수로 등록
       - name: Set up secrets as env variables
         run: |
-          echo "AES_SECRET=${{ secrets.AES_SECRET }}" >> $GITHUB_ENV
           echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
@@ -45,22 +44,24 @@ jobs:
 
       - name: Configure Maven for GitHub Packages
         run: |
-          mkdir -p ~/.m2
-          echo "<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+            mkdir -p ~/.m2
+            cat <<EOF > ~/.m2/settings.xml
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
-            <servers>
-              <server>
-                <id>github-packages</id>
-                <username>${{ secrets.COMMON_LIB_ACTOR }}</username>
-                <password>${{ secrets.COMMON_LIB_TOKEN }}</password>
-              </server>
-            </servers>
-          </settings>" > ~/.m2/settings.xml
+          <servers>
+          <server>
+          <id>github-packages</id>
+          <username>${{ secrets.COMMON_LIB_ACTOR }}</username>
+          <password>${{ secrets.COMMON_LIB_TOKEN }}</password>
+          </server>
+          </servers>
+          </settings>
+          EOF
 
       # 5. 테스트 생략하고 빌드
       - name: Package without tests
-        run: mvn clean package -Dmaven.test.skip=true -Dspring.profiles.active=release
+        run: mvn clean package -Dmaven.test.skip=true
 
       # 6. SCP를 통해 서버로 jar 파일 전송
       - name: Upload jar to server
