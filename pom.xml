@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
-        <relativePath/>
+        <version>3.4.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
     <groupId>com.nhnacademy</groupId>
     <artifactId>UserService</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>UserService</name>
     <description>UserService</description>
-
     <properties>
         <java.version>21</java.version>
-        <querydsl.version>5.1.0</querydsl.version>
+        <querydsl.version>5.0.0</querydsl.version>
         <spring-cloud.version>2024.0.1</spring-cloud.version>
         <jacoco.version>0.8.12</jacoco.version>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -38,11 +32,22 @@
     </dependencyManagement>
 
     <dependencies>
-
-        <!-- Spring Boot 기본 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+            <version>1.18.36</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -55,12 +60,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-
-        <!-- DB 관련 -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -79,47 +78,59 @@
             <version>2.12.0</version>
         </dependency>
 
-        <!-- QueryDSL -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>${querydsl.version}</version>
+            <version>5.1.0</version>
             <classifier>jakarta</classifier>
         </dependency>
 
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <version>${querydsl.version}</version>
+            <version>5.1.0</version>
             <classifier>jakarta</classifier>
         </dependency>
 
-        <!-- Lombok -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-            <version>1.18.36</version>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
         </dependency>
 
-        <!-- Spring REST Docs -->
         <dependency>
-            <groupId>org.springframework.restdocs</groupId>
-            <artifactId>spring-restdocs-mockmvc</artifactId>
-            <scope>test</scope>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>5.1.0.4751</version>
         </dependency>
 
-        <!-- 기타 유틸 -->
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.12.2</version>
+        </dependency>
+
+        <!-- Eureka Client 추가 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.common</groupId>
             <artifactId>aes-lib</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
 
-        <!-- 테스트 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -127,47 +138,55 @@
 
     <build>
         <plugins>
-
-            <!-- 컴파일러 설정 -->
+            <!-- 기본으로 항상 필요한 플러그인들은 그냥 여기 남겨둔다 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>21</source>
+                    <target>21</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>1.18.36</version>
                         </path>
-                        <path>
-                            <groupId>com.querydsl</groupId>
-                            <artifactId>querydsl-apt</artifactId>
-                            <version>${querydsl.version}</version>
-                            <classifier>jakarta</classifier>
-                        </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot -->
+            <!-- QueryDSL -->
+            <plugin>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+                <version>1.1.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>dev</id>
+            <id>dev</id> <!-- 개발용 프로필 -->
             <build>
                 <plugins>
-
-                    <!-- Jacoco -->
+                    <!-- JaCoCo 커버리지 -->
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
@@ -233,11 +252,11 @@
                             </execution>
                         </executions>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
     </profiles>
+
 
     <repositories>
         <repository>
