@@ -43,6 +43,19 @@ jobs:
           echo "spring.datasource.password=$DB_PASSWORD" >> ./src/main/resources/application-release.properties
           echo "aes.secret.key=$AES_SECRET" >> ./src/main/resources/application-release.properties
 
+      - name: Configure Maven for GitHub Packages
+        run: |
+          mkdir -p ~/.m2
+          echo "<settings>
+            <servers>
+              <server>
+                <id>github-packages</id>
+                <username>${{ secrets.COMMON_LIB_ACTOR }}</username>
+                <password>${{ secrets.COMMON_LIB_TOKEN }}</password>
+              </server>
+            </servers>
+          </settings>" > ~/.m2/settings.xml
+
       # 5. 테스트 생략하고 빌드
       - name: Package without tests
         run: mvn clean package -Dmaven.test.skip=true -Dspring.profiles.active=release
