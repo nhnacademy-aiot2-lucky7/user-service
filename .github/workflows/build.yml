@@ -31,16 +31,6 @@ jobs:
           echo "SERVER_IP_ADDRESS=${{ secrets.SERVER_IP_ADDRESS }}" >> $GITHUB_ENV
           echo "AES_SECRET=${{ secrets.AES_SECRET }}" >> $GITHUB_ENV
 
-      # 4. application.properties 파일 생성
-      - name: Generate application.properties
-        run: |
-          mkdir -p ./src/main/resources
-          echo "eureka.instance.ip-address=$SERVER_IP_ADDRESS" >> ./src/main/resources/application-release.properties
-          echo "spring.datasource.url=$DB_URL" >> ./src/main/resources/application-release.properties
-          echo "spring.datasource.username=$DB_USERNAME" >> ./src/main/resources/application-release.properties
-          echo "spring.datasource.password=$DB_PASSWORD" >> ./src/main/resources/application-release.properties
-          echo "aes.secret.key=$AES_SECRET" >> ./src/main/resources/application-release.properties
-
       - name: Configure Maven for GitHub Packages
         run: |
             mkdir -p ~/.m2
