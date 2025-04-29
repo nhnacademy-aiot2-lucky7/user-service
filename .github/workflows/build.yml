@@ -35,7 +35,6 @@ jobs:
       - name: Generate application.properties
         run: |
           mkdir -p ./src/main/resources
-          echo "aes.secret=$AES_SECRET" >> ./src/main/resources/application-release.properties
           echo "eureka.instance.ip-address=$SERVER_IP_ADDRESS" >> ./src/main/resources/application-release.properties
           echo "spring.datasource.url=$DB_URL" >> ./src/main/resources/application-release.properties
           echo "spring.datasource.username=$DB_USERNAME" >> ./src/main/resources/application-release.properties
