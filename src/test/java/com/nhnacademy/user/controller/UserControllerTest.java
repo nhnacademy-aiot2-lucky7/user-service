@@ -131,7 +131,8 @@ class UserControllerTest {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
                 "testUser",
                 "010-1234-5678",
-                "DEP-001"
+                "DEP-001",
+                "info"
         );
 
         when(aesUtil.decrypt(anyString())).thenReturn("test@eamil.com");
@@ -151,7 +152,8 @@ class UserControllerTest {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
                 "testUser",
                 "0101234-5678",
-                "DEP-001"
+                "DEP-001",
+                "info"
         );
 
         when(aesUtil.decrypt(anyString())).thenReturn("test@eamil.com");

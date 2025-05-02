@@ -274,7 +274,8 @@ class IntegrationTest {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
                 "testUser1",
                 "010-1234-5678",
-                "dept1"
+                "dept1",
+                "info"
         );
 
         mockMvc.perform(put("/users/me")
@@ -291,7 +292,8 @@ class IntegrationTest {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
                 "testUser1",
                 "0101234-5678",
-                "dept1"
+                "dept1",
+                "info"
         );
 
         mockMvc.perform(put("/users/me")
@@ -308,7 +310,8 @@ class IntegrationTest {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
                 "testUser1",
                 "010-1234-5678",
-                "dept1"
+                "dept1",
+                "info"
         );
 
         mockMvc.perform(put("/users/me")
@@ -325,7 +328,8 @@ class IntegrationTest {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
                 "testUser1",
                 "010-1234-5678",
-                "dept20"
+                "dept20",
+                "info"
         );
 
         mockMvc.perform(put("/users/me")

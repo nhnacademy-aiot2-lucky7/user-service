@@ -316,7 +316,8 @@ class UserServiceImplTest {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
                 "testUser",
                 "010-1234-5678",
-                department.getDepartmentId()
+                department.getDepartmentId(),
+                "info"
         );
 
         User user = User.ofNewMember(
@@ -343,7 +344,8 @@ class UserServiceImplTest {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
                 "testUser",
                 "010-1234-5678",
-                "DEP-001"
+                "DEP-001",
+                "info"
         );
 
         Mockito.when(userRepository.findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(Optional.empty());
@@ -358,7 +360,7 @@ class UserServiceImplTest {
     @DisplayName("사용자 정보 수정 - 존재하지 않는 부서")
     void updateUser_exception2() {
         String userEmail = "test@email.com";
-        UserUpdateRequest userUpdateRequest = new UserUpdateRequest("testUser", "010-1234-5678", "DEP-001");
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest("testUser", "010-1234-5678", "DEP-001", "info");
         User user = Mockito.mock(User.class);
 
         Mockito.when(userRepository.findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(Optional.of(user));

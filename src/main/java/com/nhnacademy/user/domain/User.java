@@ -50,6 +50,9 @@ public class User {
     @Column(name = "withdrawalAt")
     private LocalDateTime withdrawalAt;
 
+    @Column(name = "notification_level")
+    private String notificationLevel = "info";
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
@@ -93,10 +96,11 @@ public class User {
         this.role = userRole;
     }
 
-    public void updateUser(String userName, String userPhone, Department department) {
+    public void updateUser(String userName, String userPhone, Department department, String notificationLevel) {
         this.userName = userName;
         this.userPhone = userPhone;
         this.department = department;
+        this.notificationLevel = notificationLevel;
     }
 
     // 사용자 프로필 이미지 변경

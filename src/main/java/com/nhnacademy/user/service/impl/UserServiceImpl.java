@@ -172,7 +172,8 @@ public class UserServiceImpl implements UserService {
         getUser.updateUser(
                 userUpdateRequest.getUserName(),
                 userUpdateRequest.getUserPhone(),
-                department
+                department,
+                userUpdateRequest.getNotificationLevel()
         );
 
         userRepository.save(getUser);
