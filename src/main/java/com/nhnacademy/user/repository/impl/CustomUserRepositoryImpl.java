@@ -1,5 +1,7 @@
 package com.nhnacademy.user.repository.impl;
 
+import com.nhnacademy.department.dto.DepartmentResponse;
+import com.nhnacademy.eventlevel.dto.EventLevelResponse;
 import com.nhnacademy.user.domain.QUser;
 import com.nhnacademy.user.domain.User;
 import com.nhnacademy.user.dto.UserResponse;
@@ -43,7 +45,14 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                         qUser.userName,
                         qUser.userEmail,
                         qUser.userPhone,
-                        qUser.department.departmentId
+                        Projections.constructor(DepartmentResponse.class,
+                                qUser.department.departmentId,
+                                qUser.department.departmentName
+                        ),
+                        Projections.constructor(EventLevelResponse.class,
+                                qUser.eventLevel.levelName,
+                                qUser.eventLevel.levelDetails
+                        )
                 ))
                 .from(qUser)
                 .where(qUser.userEmail.eq(userEmail)
@@ -73,7 +82,14 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                         qUser.userName,
                         qUser.userEmail,
                         qUser.userPhone,
-                        qUser.department.departmentId
+                        Projections.constructor(DepartmentResponse.class,
+                                qUser.department.departmentId,
+                                qUser.department.departmentName
+                        ),
+                        Projections.constructor(EventLevelResponse.class,
+                                qUser.eventLevel.levelName,
+                                qUser.eventLevel.levelDetails
+                        )
                 ))
                 .from(qUser)
                 .where(qUser.withdrawalAt.isNull())

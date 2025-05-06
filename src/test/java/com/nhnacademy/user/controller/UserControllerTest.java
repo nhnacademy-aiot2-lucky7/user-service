@@ -2,6 +2,8 @@ package com.nhnacademy.user.controller;
 
 import com.common.AESUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.department.dto.DepartmentResponse;
+import com.nhnacademy.eventlevel.dto.EventLevelResponse;
 import com.nhnacademy.user.dto.*;
 import com.nhnacademy.user.service.UserService;
 import jakarta.ws.rs.core.MediaType;
@@ -110,7 +112,8 @@ class UserControllerTest {
                 "testUser",
                 "test@email.com",
                 "010-1234-5678",
-                "DEP-001"
+                new DepartmentResponse("DEP-001", "개발부"),
+                new EventLevelResponse("error", "에러")
         );
 
         when(aesUtil.decrypt(anyString())).thenReturn("test@eamil.com");

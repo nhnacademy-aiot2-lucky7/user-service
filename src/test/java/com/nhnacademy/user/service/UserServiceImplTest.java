@@ -4,7 +4,10 @@ import com.nhnacademy.common.exception.ConflictException;
 import com.nhnacademy.common.exception.NotFoundException;
 import com.nhnacademy.common.exception.UnauthorizedException;
 import com.nhnacademy.department.domain.Department;
+import com.nhnacademy.department.dto.DepartmentResponse;
 import com.nhnacademy.department.repository.DepartmentRepository;
+import com.nhnacademy.eventlevel.dto.EventLevelResponse;
+import com.nhnacademy.eventlevel.repository.EventLevelRepository;
 import com.nhnacademy.role.domain.Role;
 import com.nhnacademy.role.repository.RoleRepository;
 import com.nhnacademy.user.domain.User;
@@ -40,13 +43,15 @@ class UserServiceImplTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    EventLevelRepository eventLevelRepository;
+
     @InjectMocks
     UserServiceImpl userService;
 
     @Test
     @DisplayName("유저가입 - 새로운 사용자 등록")
     void createUser() {
-        Department department = new Department("DEP-001", "개발부");
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest(
                 "testUser",
                 "test@email.com",
@@ -56,7 +61,7 @@ class UserServiceImplTest {
         );
 
         Mockito.when(userRepository.existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(false);
-        Mockito.when(departmentRepository.findById(Mockito.anyString())).thenReturn(Optional.of(department));
+        Mockito.when(departmentRepository.existsById(Mockito.anyString())).thenReturn(true);
 
         userService.createUser(userRegisterRequest);
 
@@ -114,7 +119,8 @@ class UserServiceImplTest {
                 "testUser",
                 "test@email.com",
                 "010-1234-5678",
-                "DEP-001"
+                new DepartmentResponse("DEP-001", "개발부"),
+                new EventLevelResponse("error", "에러")
         );
 
         Mockito.when(userRepository.findUserResponseByUserEmail(Mockito.anyString())).thenReturn(Optional.of(userResponse));
@@ -130,7 +136,7 @@ class UserServiceImplTest {
                     Assertions.assertEquals("testUser", getUser.getUserName());
                     Assertions.assertEquals("test@email.com", getUser.getUserEmail());
                     Assertions.assertEquals("010-1234-5678", getUser.getUserPhone());
-                    Assertions.assertEquals("DEP-001", getUser.getUserDepartment());
+                    Assertions.assertEquals("DEP-001", getUser.getDepartment().getDepartmentId());
                 }
         );
     }
@@ -157,7 +163,8 @@ class UserServiceImplTest {
                         "testUser",
                         "test@email.com",
                         "010-1234-5678",
-                        "DEP-001"
+                        new DepartmentResponse("DEP-001", "개발부"),
+                        new EventLevelResponse("error", "에러")
                 ))
                 .toList();
 
@@ -329,12 +336,14 @@ class UserServiceImplTest {
         );
 
         Mockito.when(userRepository.findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(departmentRepository.findById(Mockito.anyString())).thenReturn(Optional.of(department));
+        Mockito.when(departmentRepository.existsById(Mockito.anyString())).thenReturn(true);
+        Mockito.when(eventLevelRepository.existsById(Mockito.anyString())).thenReturn(true);
 
         userService.updateUser(userEmail, userUpdateRequest);
 
         Mockito.verify(userRepository, Mockito.times(1)).findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
-        Mockito.verify(departmentRepository, Mockito.times(1)).findById(Mockito.anyString());
+        Mockito.verify(departmentRepository, Mockito.times(1)).existsById(Mockito.anyString());
+        Mockito.verify(eventLevelRepository, Mockito.times(1)).existsById(Mockito.anyString());
     }
 
     @Test
@@ -364,19 +373,37 @@ class UserServiceImplTest {
         User user = Mockito.mock(User.class);
 
         Mockito.when(userRepository.findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(departmentRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(departmentRepository.existsById(Mockito.anyString())).thenReturn(false);
+
 
         Assertions.assertThrows(NotFoundException.class, () -> userService.updateUser(userEmail, userUpdateRequest));
 
         Mockito.verify(userRepository, Mockito.times(1)).findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
-        Mockito.verify(departmentRepository, Mockito.times(1)).findById(Mockito.anyString());
+        Mockito.verify(departmentRepository, Mockito.times(1)).existsById(Mockito.anyString());
+    }
+
+    @Test
+    @DisplayName("사용자 정보 수정 - 존재하지 않는 이벤트 레벨")
+    void updateUser_exception3() {
+        String userEmail = "test@email.com";
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest("testUser", "010-1234-5678", "DEP-001", "info");
+        User user = Mockito.mock(User.class);
+
+        Mockito.when(userRepository.findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(Optional.of(user));
+        Mockito.when(departmentRepository.existsById(Mockito.anyString())).thenReturn(true);
+        Mockito.when(eventLevelRepository.existsById(Mockito.anyString())).thenReturn(false);
+
+
+        Assertions.assertThrows(NotFoundException.class, () -> userService.updateUser(userEmail, userUpdateRequest));
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
+        Mockito.verify(departmentRepository, Mockito.times(1)).existsById(Mockito.anyString());
+        Mockito.verify(eventLevelRepository, Mockito.times(1)).existsById(Mockito.anyString());
     }
 
     @Test
     @DisplayName("사용자 권한 수정")
     void updateUserRole() {
-        Role role = new Role("ROLE_OWNER", "오너");
-
         UserRoleUpdateRequest userRoleUpdateRequest = new UserRoleUpdateRequest(
                 "user@email.com",
                 "ROLE_OWNER"
@@ -391,12 +418,13 @@ class UserServiceImplTest {
         );
 
         Mockito.when(userRepository.findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(roleRepository.findById(Mockito.anyString())).thenReturn(Optional.of(role));
+        Mockito.when(roleRepository.existsById(Mockito.anyString())).thenReturn(true);
+        Mockito.when(roleRepository.getReferenceById(Mockito.anyString())).thenReturn(new Role("ROLE_OWNER", "팀장"));
 
         userService.updateUserRole(userRoleUpdateRequest);
 
         Mockito.verify(userRepository, Mockito.times(1)).findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
-        Mockito.verify(roleRepository, Mockito.times(1)).findById(Mockito.anyString());
+        Mockito.verify(roleRepository, Mockito.times(1)).existsById(Mockito.anyString());
 
         Assertions.assertEquals("ROLE_OWNER", user.getRole().getRoleId());
     }
@@ -433,12 +461,12 @@ class UserServiceImplTest {
         );
 
         Mockito.when(userRepository.findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(roleRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(roleRepository.existsById(Mockito.anyString())).thenReturn(false);
 
         Assertions.assertThrows(NotFoundException.class, () -> userService.updateUserRole(request));
 
         Mockito.verify(userRepository, Mockito.times(1)).findByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
-        Mockito.verify(roleRepository, Mockito.times(1)).findById(Mockito.anyString());
+        Mockito.verify(roleRepository, Mockito.times(1)).existsById(Mockito.anyString());
     }
 
     @Test

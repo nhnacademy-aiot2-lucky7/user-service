@@ -28,8 +28,8 @@ public class UserUpdateRequest {
     @Size(max = 45, message = "부서ID는 최대 45자까지 입력할 수 있습니다.")
     private String userDepartmentId;
 
-    @JsonProperty("notificationLevel")
-    @NotBlank(message = "알림 레벨은 필수 입력 항목입니다.")
-    @Size(max = 45, message = "알림 레벨은 최대 45자까지 입력할 수 있습니다.")
-    private String notificationLevel;
+    @JsonProperty("eventLevel")
+    @NotBlank(message = "이벤트 레벨은 필수 입력 항목입니다.")
+    @Size(max = 50, message = "이벤트 레벨은 최대 50자까지 입력할 수 있습니다.")
+    private String eventLevel;
 }

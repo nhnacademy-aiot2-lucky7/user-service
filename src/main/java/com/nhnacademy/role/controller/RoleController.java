@@ -1,13 +1,13 @@
 package com.nhnacademy.role.controller;
 
-import com.nhnacademy.role.dto.RoleRequest;
 import com.nhnacademy.role.dto.RoleResponse;
 import com.nhnacademy.role.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -29,32 +29,5 @@ public class RoleController {
 
         return ResponseEntity
                 .ok(roleService.getRoleByRoleId(roleId));
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> createRole(@Validated @RequestBody RoleRequest roleRequest) {
-        roleService.createRole(roleRequest);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
-    }
-
-    @PutMapping
-    public ResponseEntity<Void> updateRole(@Validated @RequestBody RoleRequest roleRequest) {
-        roleService.updateRole(roleRequest);
-
-        return ResponseEntity
-                .noContent()
-                .build();
-    }
-
-    @DeleteMapping("/{roleId}")
-    public ResponseEntity<Void> deleteRoleByRoleId(@PathVariable String roleId) {
-        roleService.deleteRole(roleId);
-
-        return ResponseEntity
-                .noContent()
-                .build();
     }
 }
