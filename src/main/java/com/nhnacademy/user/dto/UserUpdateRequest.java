@@ -20,7 +20,6 @@ public class UserUpdateRequest {
 
     @JsonProperty("userPhone")
     @NotBlank(message = "전화번호는 필수 입력 항목입니다.")
-    @Size(max = 20, message = "전화번호는 최대 20자까지 입력할 수 있습니다.")
     @Pattern(regexp = "^01[016789]-\\d{3,4}-\\d{4}$", message = "유효한 전화번호 형식이 아닙니다. 예: 010-1234-5678")
     private String userPhone;
 
@@ -28,4 +27,9 @@ public class UserUpdateRequest {
     @NotBlank(message = "부서ID는 필수 입력 항목입니다.")
     @Size(max = 45, message = "부서ID는 최대 45자까지 입력할 수 있습니다.")
     private String userDepartmentId;
+
+    @JsonProperty("eventLevel")
+    @NotBlank(message = "이벤트 레벨은 필수 입력 항목입니다.")
+    @Size(max = 50, message = "이벤트 레벨은 최대 50자까지 입력할 수 있습니다.")
+    private String eventLevel;
 }

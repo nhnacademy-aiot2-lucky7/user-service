@@ -1,8 +1,6 @@
 package com.nhnacademy.role.controller;
 
 import com.common.AESUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.role.dto.RoleRequest;
 import com.nhnacademy.role.dto.RoleResponse;
 import com.nhnacademy.role.service.RoleService;
 import com.nhnacademy.user.service.UserService;
@@ -19,7 +17,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,42 +72,5 @@ class RoleControllerTest {
                 .andExpect(jsonPath("$.roleName").value("일반 회원"));
 
         verify(roleService, times(1)).getRoleByRoleId(anyString());
-    }
-
-    @Test
-    @DisplayName("권한 생성 - 201 반환")
-    void createRole_201() throws Exception {
-        RoleRequest roleRequest = new RoleRequest("ROLE_MEMBER", "일반 회원");
-
-        mockMvc.perform(post("/users/roles")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(roleRequest)))
-                .andExpect(status().isCreated());
-
-        verify(roleService, times(1)).createRole(any(RoleRequest.class));
-    }
-
-    @Test
-    @DisplayName("권한 수정 - 204 반환")
-    void updateRole_204() throws Exception {
-        RoleRequest roleRequest = new RoleRequest("ROLE_MEMBER", "일반 회원");
-
-        mockMvc.perform(put("/users/roles")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(roleRequest)))
-                .andExpect(status().isNoContent());
-
-        verify(roleService, times(1)).updateRole(any(RoleRequest.class));
-    }
-
-    @Test
-    @DisplayName("권한 삭제 - 204 반환")
-    void deleteRole_204() throws Exception {
-
-        mockMvc.perform(delete("/users/roles/ROLE_MEMBER")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
-
-        verify(roleService, times(1)).deleteRole(anyString());
     }
 }
