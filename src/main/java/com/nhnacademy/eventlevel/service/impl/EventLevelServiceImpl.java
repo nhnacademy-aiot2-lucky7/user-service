@@ -39,20 +39,24 @@ public class EventLevelServiceImpl implements EventLevelService {
 
     @Override
     public void createEventLevel(EventLevelRequest eventLevelRequest) {
-        if (eventLevelRepository.existsById(eventLevelRequest.getLevelName())) {
+        if (eventLevelRepository.existsById(eventLevelRequest.getEventLevelName())) {
             throw new ConflictException(EVENT_LEVEL_ALREADY_EXISTS);
         }
 
-        EventLevel eventLevel = new EventLevel(eventLevelRequest.getLevelName(), eventLevelRequest.getLevelDetails());
+        EventLevel eventLevel = new EventLevel(
+                eventLevelRequest.getEventLevelName(),
+                eventLevelRequest.getEventLevelDetails(),
+                eventLevelRequest.getPriority()
+        );
         eventLevelRepository.save(eventLevel);
     }
 
     @Override
     public void updateEventLevel(EventLevelRequest eventLevelRequest) {
-        EventLevel eventLevel = eventLevelRepository.findById(eventLevelRequest.getLevelName())
+        EventLevel eventLevel = eventLevelRepository.findById(eventLevelRequest.getEventLevelName())
                 .orElseThrow(() -> new NotFoundException(EVENT_LEVEL_NOT_FOUND));
 
-        eventLevel.updateEventLevelDetails(eventLevelRequest.getLevelDetails());
+        eventLevel.updateEventLevel(eventLevelRequest.getEventLevelDetails(), eventLevelRequest.getPriority());
         eventLevelRepository.save(eventLevel);
     }
 

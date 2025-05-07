@@ -27,9 +27,9 @@ class EventLevelRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        eventLevelRepository.save(new EventLevel("INFO", "일반 정보 레벨"));
-        eventLevelRepository.save(new EventLevel("WARN", "경고 레벨"));
-        eventLevelRepository.save(new EventLevel("ERROR", "에러 레벨"));
+        eventLevelRepository.save(new EventLevel("INFO", "일반 정보 레벨", 1));
+        eventLevelRepository.save(new EventLevel("WARN", "경고 레벨", 2));
+        eventLevelRepository.save(new EventLevel("ERROR", "에러 레벨", 3));
 
         entityManager.flush();
         entityManager.clear();
@@ -50,7 +50,7 @@ class EventLevelRepositoryTest {
         EventLevelResponse eventLevel = eventLevelRepository.findEventLevelByLevelName("WARN")
                 .orElseThrow(() -> new NotFoundException("levelName is null"));
 
-        assertEquals("WARN", eventLevel.getLevelName());
-        assertEquals("경고 레벨", eventLevel.getLevelDetails());
+        assertEquals("WARN", eventLevel.getEventLevelName());
+        assertEquals("경고 레벨", eventLevel.getEventLevelDetails());
     }
 }

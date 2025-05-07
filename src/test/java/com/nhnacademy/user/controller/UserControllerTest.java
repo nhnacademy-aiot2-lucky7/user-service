@@ -113,7 +113,7 @@ class UserControllerTest {
                 "test@email.com",
                 "010-1234-5678",
                 new DepartmentResponse("DEP-001", "개발부"),
-                new EventLevelResponse("error", "에러")
+                new EventLevelResponse("error", "에러", 4)
         );
 
         when(aesUtil.decrypt(anyString())).thenReturn("test@eamil.com");

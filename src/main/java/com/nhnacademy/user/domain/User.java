@@ -87,7 +87,7 @@ public class User {
                 userPhone,
                 department,
                 new Role("ROLE_MEMBER", "멤버"),
-                new EventLevel("INFO", "일반 정보")
+                new EventLevel("INFO", "일반 정보", 1)
         );
     }
 

@@ -50,7 +50,7 @@ class RoleControllerTest {
 
         when(roleService.getAllRole()).thenReturn(roleResponses);
 
-        mockMvc.perform(get("/users/roles")
+        mockMvc.perform(get("/roles")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -65,7 +65,7 @@ class RoleControllerTest {
 
         when(roleService.getRoleByRoleId(anyString())).thenReturn(roleResponse);
 
-        mockMvc.perform(get("/users/roles/ROLE_MEMBER")
+        mockMvc.perform(get("/roles/ROLE_MEMBER")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.roleId").value("ROLE_MEMBER"))

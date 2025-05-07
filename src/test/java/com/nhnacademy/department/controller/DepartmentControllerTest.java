@@ -49,7 +49,7 @@ class DepartmentControllerTest {
 
         when(departmentService.getAllDepartment()).thenReturn(departmentResponses);
 
-        mockMvc.perform(get("/users/departments")
+        mockMvc.perform(get("/departments")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -64,7 +64,7 @@ class DepartmentControllerTest {
 
         when(departmentService.getDepartmentByDepartmentId(anyString())).thenReturn(departmentResponse);
 
-        mockMvc.perform(get("/users/departments/DEPT001")
+        mockMvc.perform(get("/departments/DEPT001")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.departmentId").value("DEPT001"))

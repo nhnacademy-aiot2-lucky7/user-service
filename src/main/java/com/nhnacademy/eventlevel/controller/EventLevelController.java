@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users/event-levels")
+@RequestMapping("/event-levels")
 @RequiredArgsConstructor
 public class EventLevelController {
     private final EventLevelService eventLevelService;

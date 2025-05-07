@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -57,7 +59,7 @@ class AdminControllerTest {
                 "test@email.com",
                 "010-1234-5678",
                 new DepartmentResponse("DEP-001", "개발부"),
-                new EventLevelResponse("error", "에러")
+                new EventLevelResponse("error", "에러", 4)
         );
 
         when(aesUtil.decrypt(anyString())).thenReturn("admin@email.com");
@@ -76,11 +78,12 @@ class AdminControllerTest {
                                 "test" + i + "@email.com",
                                 "010-1234-567" + i,
                                 new DepartmentResponse("DEP-001", "개발부"),
-                                new EventLevelResponse("error", "에러")
+                                new EventLevelResponse("error", "에러", 4)
                         ))
                 .toList();
 
-        when(userService.getAllUser()).thenReturn(userResponses);
+        Pageable pageable = PageRequest.of(0, 10);
+        when(userService.getAllUser(pageable)).thenReturn(userResponses);
 
         mockMvc.perform(get("/admin/users")
                         .header("X-User-Id", "encryptEmail")
@@ -88,7 +91,7 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(userService, times(1)).getAllUser();
+        verify(userService, times(1)).getAllUser(any(Pageable.class));
     }
 
     @Test
@@ -101,7 +104,7 @@ class AdminControllerTest {
                 "test@email.com",
                 "010-1234-5678",
                 new DepartmentResponse("DEP-001", "개발부"),
-                new EventLevelResponse("error", "에러")
+                new EventLevelResponse("error", "에러", 4)
         );
 
         when(userService.getUser("test@email.com")).thenReturn(userResponse);
@@ -164,7 +167,7 @@ class AdminControllerTest {
     @Test
     @DisplayName("이벤트 레벨 생성 - 201 반환")
     void createEventLevel_201() throws Exception {
-        EventLevelRequest request = new EventLevelRequest("INFO", "정보성 메시지");
+        EventLevelRequest request = new EventLevelRequest("INFO", "정보성 메시지", 1);
 
         mockMvc.perform(post("/admin/event-levels")
                         .header("X-User-Id", "encryptEmail")
@@ -178,7 +181,7 @@ class AdminControllerTest {
     @Test
     @DisplayName("이벤트 레벨 수정 - 204 반환")
     void updateEventLevel_204() throws Exception {
-        EventLevelRequest request = new EventLevelRequest("INFO", "수정된 정보 메시지");
+        EventLevelRequest request = new EventLevelRequest("INFO", "수정된 정보 메시지", 1);
 
         mockMvc.perform(put("/admin/event-levels")
                         .header("X-User-Id", "encryptEmail")

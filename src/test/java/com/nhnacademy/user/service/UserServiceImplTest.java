@@ -22,6 +22,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -120,7 +122,7 @@ class UserServiceImplTest {
                 "test@email.com",
                 "010-1234-5678",
                 new DepartmentResponse("DEP-001", "개발부"),
-                new EventLevelResponse("error", "에러")
+                new EventLevelResponse("error", "에러", 4)
         );
 
         Mockito.when(userRepository.findUserResponseByUserEmail(Mockito.anyString())).thenReturn(Optional.of(userResponse));
@@ -154,28 +156,29 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("모든 사용자 조회")
-    void getAllUser() {
+    @DisplayName("서비스에서 페이징된 사용자 목록 가져오기")
+    void getAllUser_withPaging() {
+        Pageable pageable = PageRequest.of(0, 10);
+
         List<UserResponse> userResponses = IntStream.range(1, 11)
                 .mapToObj(i -> new UserResponse(
                         "ROLE_MEMBER",
-                        1L,
-                        "testUser",
-                        "test@email.com",
-                        "010-1234-5678",
+                        (long) i,
+                        "testUser" + i,
+                        "test" + i + "@email.com",
+                        "010-1234-567" + i,
                         new DepartmentResponse("DEP-001", "개발부"),
-                        new EventLevelResponse("error", "에러")
+                        new EventLevelResponse("error", "에러", 4)
                 ))
                 .toList();
 
+        Mockito.when(userRepository.findAllUserResponse(pageable))
+                .thenReturn(Optional.of(userResponses));
 
-        Mockito.when(userRepository.findAllUserResponse()).thenReturn(Optional.of(userResponses));
+        List<UserResponse> result = userService.getAllUser(pageable);
 
-        List<UserResponse> getUserResponses = userService.getAllUser();
-
-        Mockito.verify(userRepository, Mockito.times(1)).findAllUserResponse();
-
-        Assertions.assertEquals(10, getUserResponses.size());
+        Mockito.verify(userRepository, Mockito.times(1)).findAllUserResponse(pageable);
+        Assertions.assertEquals(10, result.size());
     }
 
     @Test

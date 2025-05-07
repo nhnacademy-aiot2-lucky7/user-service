@@ -15,6 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -98,7 +100,7 @@ class UserRepositoryTest {
     void findAllUserResponse() {
         Department department = new Department("DEP-001", "개발부");
         Role role = new Role("ROLE_MEMBER", "멤버");
-        EventLevel eventLevel = new EventLevel("INFO", "일반 정보");
+        EventLevel eventLevel = new EventLevel("INFO", "일반 정보", 1);
 
         roleRepository.save(role);
         departmentRepository.save(department);
@@ -118,7 +120,8 @@ class UserRepositoryTest {
 
         entityManager.clear();
 
-        List<UserResponse> allUsers = userRepository.findAllUserResponse()
+        Pageable pageable = PageRequest.of(0, 10);
+        List<UserResponse> allUsers = userRepository.findAllUserResponse(pageable)
                 .orElse(List.of());
         Assertions.assertEquals(10, allUsers.size());
 
@@ -132,7 +135,7 @@ class UserRepositoryTest {
     void existsByUserEmailAndWithdrawalAtIsNull() {
         Department department = new Department("DEP-001", "개발부");
         Role role = new Role("ROLE_MEMBER", "멤버");
-        EventLevel eventLevel = new EventLevel("INFO", "일반 정보");
+        EventLevel eventLevel = new EventLevel("INFO", "일반 정보", 1);
 
         roleRepository.save(role);
         departmentRepository.save(department);
@@ -168,7 +171,7 @@ class UserRepositoryTest {
     void findByUserEmailAndWithdrawalAtIsNull() {
         Department department = new Department("DEP-001", "개발부");
         Role role = new Role("ROLE_MEMBER", "멤버");
-        EventLevel eventLevel = new EventLevel("INFO", "일반 정보");
+        EventLevel eventLevel = new EventLevel("INFO", "일반 정보", 1);
 
         roleRepository.save(role);
         departmentRepository.save(department);

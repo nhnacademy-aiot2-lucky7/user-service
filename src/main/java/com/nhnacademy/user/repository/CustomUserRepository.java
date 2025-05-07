@@ -1,6 +1,7 @@
 package com.nhnacademy.user.repository;
 
 import com.nhnacademy.user.dto.UserResponse;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,5 +37,7 @@ public interface CustomUserRepository {
      * @return 시스템에 존재하는 모든 사용자 정보가 담긴 {@link List<UserResponse>}를 {@link Optional}로 반환,
      * 사용자가 존재하지 않으면 {@link Optional#empty()}를 반환
      */
-    Optional<List<UserResponse>> findAllUserResponse();
+    Optional<List<UserResponse>> findAllUserResponse(Pageable pageable);
+
+    Optional<List<UserResponse>> findUsersByDepartmentId(String departmentId, Pageable pageable);
 }

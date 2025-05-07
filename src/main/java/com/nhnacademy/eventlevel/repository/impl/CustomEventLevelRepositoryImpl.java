@@ -24,8 +24,9 @@ public class CustomEventLevelRepositoryImpl extends QuerydslRepositorySupport im
         return Optional.of(query
                 .select(Projections.constructor(
                         EventLevelResponse.class,
-                        qEventLevel.levelName,
-                        qEventLevel.levelDetails
+                        qEventLevel.eventLevelName,
+                        qEventLevel.eventLevelDetails,
+                        qEventLevel.priority
                 ))
                 .from(qEventLevel)
                 .fetch());
@@ -39,11 +40,12 @@ public class CustomEventLevelRepositoryImpl extends QuerydslRepositorySupport im
         return Optional.ofNullable(query
                 .select(Projections.constructor(
                         EventLevelResponse.class,
-                        qEventLevel.levelName,
-                        qEventLevel.levelDetails
+                        qEventLevel.eventLevelName,
+                        qEventLevel.eventLevelDetails,
+                        qEventLevel.priority
                 ))
                 .from(qEventLevel)
-                .where(qEventLevel.levelName.eq(levelName))
+                .where(qEventLevel.eventLevelName.eq(levelName))
                 .fetchOne());
     }
 }

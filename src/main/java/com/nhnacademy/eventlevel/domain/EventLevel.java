@@ -16,13 +16,17 @@ import lombok.NoArgsConstructor;
 @Getter
 public class EventLevel {
     @Id
-    @Column(name = "level_name", length = 50)
-    private String levelName;
+    @Column(name = "event_level_name", length = 50)
+    private String eventLevelName;
 
-    @Column(name = "level_details", length = 300)
-    private String levelDetails;
+    @Column(name = "event_level_details", length = 300)
+    private String eventLevelDetails;
 
-    public void updateEventLevelDetails(String levelDetails) {
-        this.levelDetails = levelDetails;
+    @Column(name = "priority")
+    private Integer priority;
+
+    public void updateEventLevel(String levelDetails, int priority) {
+        this.eventLevelDetails = levelDetails;
+        this.priority = priority;
     }
 }

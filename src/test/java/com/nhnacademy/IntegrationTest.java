@@ -78,9 +78,9 @@ class IntegrationTest {
         roleRepository.save(new Role("ROLE_ADMIN", "관리자"));
 
         // EventLevel 추가
-        eventLevelRepository.save(new EventLevel("INFO", "일반 정보"));
-        eventLevelRepository.save(new EventLevel("CRITICAL", "치명적 오류"));
-        eventLevelRepository.save(new EventLevel("WARNING", "위험한 정보"));
+        eventLevelRepository.save(new EventLevel("INFO", "일반 정보", 1));
+        eventLevelRepository.save(new EventLevel("CRITICAL", "치명적 오류", 2));
+        eventLevelRepository.save(new EventLevel("WARNING", "위험한 정보", 3));
 
         // User 20명 생성 (부서, 롤 랜덤 지정)
         List<Department> departments = departmentRepository.findAll();
@@ -720,7 +720,7 @@ class IntegrationTest {
     @Test
     @DisplayName("모든 권한 조회 - 200 반환")
     void getAllRole_200() throws Exception {
-        mockMvc.perform(get("/users/roles")
+        mockMvc.perform(get("/roles")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -730,7 +730,7 @@ class IntegrationTest {
     @Test
     @DisplayName("권한ID에 따른 조회 - 200 반환")
     void getRoleByRoleId_200() throws Exception {
-        mockMvc.perform(get("/users/roles/ROLE_MEMBER")
+        mockMvc.perform(get("/roles/ROLE_MEMBER")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.roleId").value("ROLE_MEMBER"))
@@ -741,7 +741,7 @@ class IntegrationTest {
     @Test
     @DisplayName("권한ID에 따른 조회 - 권한ID 존재하지 않음 404 반환")
     void getRoleByRoleId_404() throws Exception {
-        mockMvc.perform(get("/users/roles/ROLE_TEST")
+        mockMvc.perform(get("/roles/ROLE_TEST")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andDo(document("get-role-by-role-id-404-not-found"));
@@ -824,7 +824,7 @@ class IntegrationTest {
     @Test
     @DisplayName("모든 부서 조회 - 200 반환")
     void getAllDepartment_200() throws Exception {
-        mockMvc.perform(get("/users/departments")
+        mockMvc.perform(get("/departments")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -834,7 +834,7 @@ class IntegrationTest {
     @Test
     @DisplayName("부서ID에 따른 조회 - 200 반환")
     void getDepartmentByDepartmentId_200() throws Exception {
-        mockMvc.perform(get("/users/departments/dept1")
+        mockMvc.perform(get("/departments/dept1")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.departmentId").value("dept1"))
@@ -845,7 +845,7 @@ class IntegrationTest {
     @Test
     @DisplayName("부서ID에 따른 조회 - 존재하지 않는 부서ID 404 반환")
     void getDepartmentByDepartmentId_404() throws Exception {
-        mockMvc.perform(get("/users/departments/dept10")
+        mockMvc.perform(get("/departments/dept10")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andDo(document("get-department-by-department-id-404-not-found"));
@@ -928,7 +928,7 @@ class IntegrationTest {
     @Test
     @DisplayName("모든 이벤트 레벨 조회 - 200 반환")
     void getAllEventLevel_200() throws Exception {
-        mockMvc.perform(get("/users/event-levels")
+        mockMvc.perform(get("/event-levels")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -938,18 +938,18 @@ class IntegrationTest {
     @Test
     @DisplayName("이벤트 레벨명으로 조회 - 200 반환")
     void getEventLevelByLevelName_200() throws Exception {
-        mockMvc.perform(get("/users/event-levels/CRITICAL")
+        mockMvc.perform(get("/event-levels/CRITICAL")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.levelName").value("CRITICAL"))
-                .andExpect(jsonPath("$.levelDetails").value("치명적 오류"))
+                .andExpect(jsonPath("$.eventLevelName").value("CRITICAL"))
+                .andExpect(jsonPath("$.eventLevelDetails").value("치명적 오류"))
                 .andDo(document("get-event-level-by-name-200"));
     }
 
     @Test
     @DisplayName("이벤트 레벨명으로 조회 - 존재하지 않는 이름 404 반환")
     void getEventLevelByLevelName_404() throws Exception {
-        mockMvc.perform(get("/users/event-levels/UNKNOWN")
+        mockMvc.perform(get("/event-levels/UNKNOWN")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andDo(document("get-event-level-by-name-404-not-found"));
@@ -958,7 +958,7 @@ class IntegrationTest {
     @Test
     @DisplayName("이벤트 레벨 생성 - 201 반환")
     void createEventLevel_201() throws Exception {
-        EventLevelRequest request = new EventLevelRequest("UNKNOWN", "정보성 메시지");
+        EventLevelRequest request = new EventLevelRequest("UNKNOWN", "정보성 메시지", 5);
 
         mockMvc.perform(post("/admin/event-levels")
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
@@ -971,7 +971,7 @@ class IntegrationTest {
     @Test
     @DisplayName("이벤트 레벨 생성 - 중복으로 인한 409 반환")
     void createEventLevel_409() throws Exception {
-        EventLevelRequest request = new EventLevelRequest("CRITICAL", "중복된 레벨");
+        EventLevelRequest request = new EventLevelRequest("CRITICAL", "중복된 레벨", 4);
 
         mockMvc.perform(post("/admin/event-levels")
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
@@ -984,7 +984,7 @@ class IntegrationTest {
     @Test
     @DisplayName("이벤트 레벨 수정 - 204 반환")
     void updateEventLevel_204() throws Exception {
-        EventLevelRequest request = new EventLevelRequest("INFO", "수정된 정보 메시지");
+        EventLevelRequest request = new EventLevelRequest("INFO", "수정된 정보 메시지", 1);
 
         mockMvc.perform(put("/admin/event-levels")
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))
@@ -997,7 +997,7 @@ class IntegrationTest {
     @Test
     @DisplayName("이벤트 레벨 수정 - 존재하지 않는 레벨 404 반환")
     void updateEventLevel_404() throws Exception {
-        EventLevelRequest request = new EventLevelRequest("UNKNOWN", "없는 레벨");
+        EventLevelRequest request = new EventLevelRequest("UNKNOWN", "없는 레벨", 5);
 
         mockMvc.perform(put("/admin/event-levels")
                         .header("X-User-Id", aesUtil.encrypt("admin@test.com"))

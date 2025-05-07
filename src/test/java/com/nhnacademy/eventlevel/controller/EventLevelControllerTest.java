@@ -41,12 +41,12 @@ class EventLevelControllerTest {
     @DisplayName("모든 이벤트 레벨 조회 - 200 반환")
     void getAllEventLevel_200() throws Exception {
         List<EventLevelResponse> responses = IntStream.range(1, 6)
-                .mapToObj(i -> new EventLevelResponse("LEVEL" + i, "설명" + i))
+                .mapToObj(i -> new EventLevelResponse("LEVEL" + i, "설명" + i, i))
                 .toList();
 
         when(eventLevelService.getAllEventLevel()).thenReturn(responses);
 
-        mockMvc.perform(get("/users/event-levels")
+        mockMvc.perform(get("/event-levels")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -57,15 +57,16 @@ class EventLevelControllerTest {
     @Test
     @DisplayName("이벤트 레벨명으로 조회 - 200 반환")
     void getEventLevelByLevelName_200() throws Exception {
-        EventLevelResponse response = new EventLevelResponse("CRITICAL", "치명적 오류");
+        EventLevelResponse response = new EventLevelResponse("CRITICAL", "치명적 오류", 4);
 
         when(eventLevelService.getEventLevelByLevelName("CRITICAL")).thenReturn(response);
 
-        mockMvc.perform(get("/users/event-levels/CRITICAL")
+        mockMvc.perform(get("/event-levels/CRITICAL")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.levelName").value("CRITICAL"))
-                .andExpect(jsonPath("$.levelDetails").value("치명적 오류"));
+                .andExpect(jsonPath("$.eventLevelName").value("CRITICAL"))
+                .andExpect(jsonPath("$.eventLevelDetails").value("치명적 오류"))
+                .andExpect(jsonPath("$.priority").value(4));
 
         verify(eventLevelService, times(1)).getEventLevelByLevelName("CRITICAL");
     }

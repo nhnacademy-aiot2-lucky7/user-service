@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 public class EventLevelResponse {
-    private String levelName;
+    private String eventLevelName;
 
-    private String levelDetails;
+    private String eventLevelDetails;
+
+    private Integer priority;
 }

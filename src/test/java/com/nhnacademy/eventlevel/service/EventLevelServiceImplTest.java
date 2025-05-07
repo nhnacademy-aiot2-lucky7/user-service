@@ -33,7 +33,7 @@ class EventLevelServiceImplTest {
     @DisplayName("모든 이벤트 레벨 조회")
     void getAllEventLevel() {
         List<EventLevelResponse> eventLevelResponses = IntStream.range(1, 6)
-                .mapToObj(i -> new EventLevelResponse("L" + i, "레벨 설명 " + i))
+                .mapToObj(i -> new EventLevelResponse("L" + i, "레벨 설명 " + i, i))
                 .toList();
 
         when(eventLevelRepository.findAllEventLevel()).thenReturn(Optional.of(eventLevelResponses));
@@ -47,15 +47,15 @@ class EventLevelServiceImplTest {
     @Test
     @DisplayName("레벨명으로 이벤트 레벨 조회")
     void getEventLevelByLevelName() {
-        EventLevelResponse eventLevelResponse = new EventLevelResponse("CRITICAL", "심각한 이벤트");
+        EventLevelResponse eventLevelResponse = new EventLevelResponse("CRITICAL", "심각한 이벤트", 4);
 
         when(eventLevelRepository.findEventLevelByLevelName(anyString())).thenReturn(Optional.of(eventLevelResponse));
 
         EventLevelResponse result = eventLevelService.getEventLevelByLevelName("CRITICAL");
 
         verify(eventLevelRepository, times(1)).findEventLevelByLevelName(anyString());
-        Assertions.assertEquals("CRITICAL", result.getLevelName());
-        Assertions.assertEquals("심각한 이벤트", result.getLevelDetails());
+        Assertions.assertEquals("CRITICAL", result.getEventLevelName());
+        Assertions.assertEquals("심각한 이벤트", result.getEventLevelDetails());
     }
 
     @Test
@@ -73,7 +73,7 @@ class EventLevelServiceImplTest {
     void createEventLevel() {
         when(eventLevelRepository.existsById(anyString())).thenReturn(false);
 
-        eventLevelService.createEventLevel(new EventLevelRequest("HIGH", "높은 위험 수준"));
+        eventLevelService.createEventLevel(new EventLevelRequest("HIGH", "높은 위험 수준", 3));
 
         verify(eventLevelRepository, times(1)).existsById(anyString());
         verify(eventLevelRepository, times(1)).save(any(EventLevel.class));
@@ -82,7 +82,7 @@ class EventLevelServiceImplTest {
     @Test
     @DisplayName("이벤트 레벨 생성 - 이미 존재하는 레벨명")
     void createEventLevel_exception() {
-        EventLevelRequest eventLevelRequest = new EventLevelRequest("HIGH", "높은 위험 수준");
+        EventLevelRequest eventLevelRequest = new EventLevelRequest("HIGH", "높은 위험 수준", 3);
         when(eventLevelRepository.existsById(anyString())).thenReturn(true);
 
         Assertions.assertThrows(ConflictException.class, () ->
@@ -95,11 +95,11 @@ class EventLevelServiceImplTest {
     @Test
     @DisplayName("이벤트 레벨 수정")
     void updateEventLevel() {
-        EventLevel eventLevel = new EventLevel("LOW", "기존 설명");
+        EventLevel eventLevel = new EventLevel("LOW", "기존 설명", 1);
 
         when(eventLevelRepository.findById(anyString())).thenReturn(Optional.of(eventLevel));
 
-        eventLevelService.updateEventLevel(new EventLevelRequest("LOW", "수정된 설명"));
+        eventLevelService.updateEventLevel(new EventLevelRequest("LOW", "수정된 설명", 1));
 
         verify(eventLevelRepository, times(1)).findById(anyString());
         verify(eventLevelRepository, times(1)).save(any(EventLevel.class));
@@ -108,7 +108,7 @@ class EventLevelServiceImplTest {
     @Test
     @DisplayName("이벤트 레벨 수정 - 존재하지 않음")
     void updateEventLevel_exception() {
-        EventLevelRequest eventLevelRequest = new EventLevelRequest("LOW", "수정된 설명");
+        EventLevelRequest eventLevelRequest = new EventLevelRequest("LOW", "수정된 설명", 1);
         when(eventLevelRepository.findById(anyString())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(NotFoundException.class, () ->
