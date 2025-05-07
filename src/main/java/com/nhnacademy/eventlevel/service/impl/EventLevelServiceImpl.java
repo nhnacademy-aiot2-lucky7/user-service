@@ -17,6 +17,9 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class EventLevelServiceImpl implements EventLevelService {
+    private static final String EVENT_LEVEL_NOT_FOUND = "존재하지 않는 이벤트 레벨";
+    private static final String EVENT_LEVEL_ALREADY_EXISTS = "이미 존재하는 eventLevel";
+
     private final EventLevelRepository eventLevelRepository;
 
     @Transactional(readOnly = true)
@@ -31,34 +34,32 @@ public class EventLevelServiceImpl implements EventLevelService {
     @Override
     public EventLevelResponse getEventLevelByLevelName(String levelName) {
         return eventLevelRepository.findEventLevelByLevelName(levelName)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 이벤트 레벨"));
+                .orElseThrow(() -> new NotFoundException(EVENT_LEVEL_NOT_FOUND));
     }
 
     @Override
     public void createEventLevel(EventLevelRequest eventLevelRequest) {
         if (eventLevelRepository.existsById(eventLevelRequest.getLevelName())) {
-            throw new ConflictException("이미 존재하는 eventLevel");
+            throw new ConflictException(EVENT_LEVEL_ALREADY_EXISTS);
         }
 
         EventLevel eventLevel = new EventLevel(eventLevelRequest.getLevelName(), eventLevelRequest.getLevelDetails());
-
         eventLevelRepository.save(eventLevel);
     }
 
     @Override
     public void updateEventLevel(EventLevelRequest eventLevelRequest) {
         EventLevel eventLevel = eventLevelRepository.findById(eventLevelRequest.getLevelName())
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 이벤트 레벨"));
+                .orElseThrow(() -> new NotFoundException(EVENT_LEVEL_NOT_FOUND));
 
         eventLevel.updateEventLevelDetails(eventLevelRequest.getLevelDetails());
-
         eventLevelRepository.save(eventLevel);
     }
 
     @Override
     public void deleteEventLevel(String levelName) {
         if (!eventLevelRepository.existsById(levelName)) {
-            throw new NotFoundException("존재하지 않는 이벤트 레벨");
+            throw new NotFoundException(EVENT_LEVEL_NOT_FOUND);
         }
 
         eventLevelRepository.deleteById(levelName);
