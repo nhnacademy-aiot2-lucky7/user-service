@@ -3,6 +3,8 @@ package com.nhnacademy.user.repository;
 import com.nhnacademy.common.exception.NotFoundException;
 import com.nhnacademy.department.domain.Department;
 import com.nhnacademy.department.repository.DepartmentRepository;
+import com.nhnacademy.eventlevel.domain.EventLevel;
+import com.nhnacademy.eventlevel.repository.EventLevelRepository;
 import com.nhnacademy.role.domain.Role;
 import com.nhnacademy.role.repository.RoleRepository;
 import com.nhnacademy.user.domain.User;
@@ -13,6 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -39,6 +43,9 @@ class UserRepositoryTest {
     @Autowired
     DepartmentRepository departmentRepository;
 
+    @Autowired
+    EventLevelRepository eventLevelRepository;
+
     /**
      * 테스트를 위한 사용자 등록 메서드
      *
@@ -56,6 +63,8 @@ class UserRepositoryTest {
 
         departmentRepository.save(department);
         roleRepository.save(user.getRole());
+        eventLevelRepository.save(user.getEventLevel());
+
         return userRepository.save(user);
     }
 
@@ -81,7 +90,7 @@ class UserRepositoryTest {
                     Assertions.assertEquals("user@email.com", response.getUserEmail());
                     Assertions.assertEquals("user", response.getUserName());
                     Assertions.assertEquals(user.getUserNo(), response.getUserNo());
-                    Assertions.assertEquals("MCS-234", response.getUserDepartment());
+                    Assertions.assertEquals("MCS-234", response.getDepartment().getDepartmentId());
                 }
         );
     }
@@ -91,9 +100,11 @@ class UserRepositoryTest {
     void findAllUserResponse() {
         Department department = new Department("DEP-001", "개발부");
         Role role = new Role("ROLE_MEMBER", "멤버");
+        EventLevel eventLevel = new EventLevel("INFO", "일반 정보", 1);
 
         roleRepository.save(role);
         departmentRepository.save(department);
+        eventLevelRepository.save(eventLevel);
 
         // 사용자 10명 생성
         IntStream.range(1, 11).forEach(i -> {
@@ -109,7 +120,8 @@ class UserRepositoryTest {
 
         entityManager.clear();
 
-        List<UserResponse> allUsers = userRepository.findAllUserResponse()
+        Pageable pageable = PageRequest.of(0, 10);
+        List<UserResponse> allUsers = userRepository.findAllUserResponse(pageable)
                 .orElse(List.of());
         Assertions.assertEquals(10, allUsers.size());
 
@@ -123,9 +135,11 @@ class UserRepositoryTest {
     void existsByUserEmailAndWithdrawalAtIsNull() {
         Department department = new Department("DEP-001", "개발부");
         Role role = new Role("ROLE_MEMBER", "멤버");
+        EventLevel eventLevel = new EventLevel("INFO", "일반 정보", 1);
 
         roleRepository.save(role);
         departmentRepository.save(department);
+        eventLevelRepository.save(eventLevel);
 
         // 사용자 10명 생성
         IntStream.range(1, 11).forEach(i -> {
@@ -157,9 +171,11 @@ class UserRepositoryTest {
     void findByUserEmailAndWithdrawalAtIsNull() {
         Department department = new Department("DEP-001", "개발부");
         Role role = new Role("ROLE_MEMBER", "멤버");
+        EventLevel eventLevel = new EventLevel("INFO", "일반 정보", 1);
 
         roleRepository.save(role);
         departmentRepository.save(department);
+        eventLevelRepository.save(eventLevel);
 
         // 사용자 10명 생성
         IntStream.range(1, 11).forEach(i -> {

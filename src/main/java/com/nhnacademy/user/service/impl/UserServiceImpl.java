@@ -5,6 +5,8 @@ import com.nhnacademy.common.exception.NotFoundException;
 import com.nhnacademy.common.exception.UnauthorizedException;
 import com.nhnacademy.department.domain.Department;
 import com.nhnacademy.department.repository.DepartmentRepository;
+import com.nhnacademy.eventlevel.domain.EventLevel;
+import com.nhnacademy.eventlevel.repository.EventLevelRepository;
 import com.nhnacademy.role.domain.Role;
 import com.nhnacademy.role.repository.RoleRepository;
 import com.nhnacademy.user.domain.User;
@@ -13,6 +15,7 @@ import com.nhnacademy.user.repository.UserRepository;
 import com.nhnacademy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final DepartmentRepository departmentRepository;
+    private final EventLevelRepository eventLevelRepository;
 
     /**
      * 새로운 사용자를 등록합니다.
@@ -55,8 +59,10 @@ public class UserServiceImpl implements UserService {
             throw new ConflictException("이미 존재하는 이메일입니다.");
         }
 
-        Department department = departmentRepository.findById(registerUserRequest.getUserDepartment())
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 부서입니다."));
+        if (!departmentRepository.existsById(registerUserRequest.getUserDepartment())) {
+            throw new NotFoundException("존재하지 않는 부서입니다.");
+        }
+        Department department = departmentRepository.getReferenceById(registerUserRequest.getUserDepartment());
 
         String encodePassword = passwordEncoder.encode(registerUserRequest.getUserPassword());
 
@@ -100,8 +106,15 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<UserResponse> getAllUser() {
-        return userRepository.findAllUserResponse()
+    public List<UserResponse> getAllUser(Pageable pageable) {
+        return userRepository.findAllUserResponse(pageable)
+                .orElse(Collections.emptyList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<UserResponse> getUsersByDepartmentId(String departmentId, Pageable pageable) {
+        return userRepository.findUsersByDepartmentId(departmentId, pageable)
                 .orElse(Collections.emptyList());
     }
 
@@ -166,13 +179,21 @@ public class UserServiceImpl implements UserService {
         User getUser = userRepository.findByUserEmailAndWithdrawalAtIsNull(userEmail)
                 .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는 유저를 찾을 수 없습니다."));
 
-        Department department = departmentRepository.findById(userUpdateRequest.getUserDepartmentId())
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 부서입니다."));
+        if (!departmentRepository.existsById(userUpdateRequest.getUserDepartmentId())) {
+            throw new NotFoundException("존재하지 않는 부서 아이디");
+        }
+        Department department = departmentRepository.getReferenceById(userUpdateRequest.getUserDepartmentId());
+
+        if (!eventLevelRepository.existsById(userUpdateRequest.getEventLevel())) {
+            throw new NotFoundException("존재하지 않는 이벤트 레벨");
+        }
+        EventLevel eventLevel = eventLevelRepository.getReferenceById(userUpdateRequest.getEventLevel());
 
         getUser.updateUser(
                 userUpdateRequest.getUserName(),
                 userUpdateRequest.getUserPhone(),
-                department
+                department,
+                eventLevel
         );
 
         userRepository.save(getUser);
@@ -192,8 +213,10 @@ public class UserServiceImpl implements UserService {
         User getUser = userRepository.findByUserEmailAndWithdrawalAtIsNull(userRoleUpdateRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는 유저를 찾을 수 없습니다."));
 
-        Role role = roleRepository.findById(userRoleUpdateRequest.getRoleId())
-                .orElseThrow(() -> new NotFoundException("해당 RoleId의 권한 찾을 수 없습니다."));
+        if (!roleRepository.existsById(userRoleUpdateRequest.getRoleId())) {
+            throw new NotFoundException("해당 RoleId의 권한 찾을 수 없습니다.");
+        }
+        Role role = roleRepository.getReferenceById(userRoleUpdateRequest.getRoleId());
 
         getUser.changeRole(role);
 

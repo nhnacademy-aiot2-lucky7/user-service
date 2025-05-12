@@ -1,8 +1,8 @@
-package com.nhnacademy.department.controller;
+package com.nhnacademy.eventlevel.controller;
 
 import com.common.AESUtil;
-import com.nhnacademy.department.dto.DepartmentResponse;
-import com.nhnacademy.department.service.DepartmentService;
+import com.nhnacademy.eventlevel.dto.EventLevelResponse;
+import com.nhnacademy.eventlevel.service.EventLevelService;
 import com.nhnacademy.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,14 +21,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(DepartmentController.class)
+@WebMvcTest(EventLevelController.class)
 @AutoConfigureMockMvc
-class DepartmentControllerTest {
+class EventLevelControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private DepartmentService departmentService;
+    private EventLevelService eventLevelService;
 
     @MockitoBean
     private UserService userService;
@@ -37,39 +38,36 @@ class DepartmentControllerTest {
     private AESUtil aesUtil;
 
     @Test
-    @DisplayName("모든 부서 조회 - 200 반환")
-    void getAllDepartment_200() throws Exception {
-        List<DepartmentResponse> departmentResponses = IntStream.range(1, 11)
-                .mapToObj(i ->
-                        new DepartmentResponse(
-                                "departmentId" + i,
-                                "departmentName" + i
-                        ))
+    @DisplayName("모든 이벤트 레벨 조회 - 200 반환")
+    void getAllEventLevel_200() throws Exception {
+        List<EventLevelResponse> responses = IntStream.range(1, 6)
+                .mapToObj(i -> new EventLevelResponse("LEVEL" + i, "설명" + i, i))
                 .toList();
 
-        when(departmentService.getAllDepartment()).thenReturn(departmentResponses);
+        when(eventLevelService.getAllEventLevel()).thenReturn(responses);
 
-        mockMvc.perform(get("/departments")
+        mockMvc.perform(get("/event-levels")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(departmentService, times(1)).getAllDepartment();
+        verify(eventLevelService, times(1)).getAllEventLevel();
     }
 
     @Test
-    @DisplayName("부서ID에 따른 조회 - 200 반환")
-    void getDepartmentByDepartmentId_200() throws Exception {
-        DepartmentResponse departmentResponse = new DepartmentResponse("DEPT001", "인사부");
+    @DisplayName("이벤트 레벨명으로 조회 - 200 반환")
+    void getEventLevelByLevelName_200() throws Exception {
+        EventLevelResponse response = new EventLevelResponse("CRITICAL", "치명적 오류", 4);
 
-        when(departmentService.getDepartmentByDepartmentId(anyString())).thenReturn(departmentResponse);
+        when(eventLevelService.getEventLevelByLevelName("CRITICAL")).thenReturn(response);
 
-        mockMvc.perform(get("/departments/DEPT001")
+        mockMvc.perform(get("/event-levels/CRITICAL")
                         .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.departmentId").value("DEPT001"))
-                .andExpect(jsonPath("$.departmentName").value("인사부"));
+                .andExpect(jsonPath("$.eventLevelName").value("CRITICAL"))
+                .andExpect(jsonPath("$.eventLevelDetails").value("치명적 오류"))
+                .andExpect(jsonPath("$.priority").value(4));
 
-        verify(departmentService, times(1)).getDepartmentByDepartmentId(anyString());
+        verify(eventLevelService, times(1)).getEventLevelByLevelName("CRITICAL");
     }
 }

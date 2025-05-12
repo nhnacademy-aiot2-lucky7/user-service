@@ -448,6 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_get_image_404_image_not_found">Get image 404 image not found</a></li>
 <li><a href="#_update_image_404_user_not_found">Update image 404 user not found</a></li>
 <li><a href="#_get_all_users_200">Get all users 200</a></li>
+<li><a href="#_get_event_level_by_name_200">Get event level by name 200</a></li>
 <li><a href="#_delete_my_account_204">Delete my account 204</a></li>
 <li><a href="#_signin_success_200">Signin success 200</a></li>
 <li><a href="#_update_my_info_204">Update my info 204</a></li>
@@ -455,6 +456,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_signup_fail_validation_400">Signup fail validation 400</a></li>
 <li><a href="#_get_all_role_200">Get all role 200</a></li>
 <li><a href="#_create_image_201">Create image 201</a></li>
+<li><a href="#_get_all_event_level_200">Get all event level 200</a></li>
 <li><a href="#_get_role_by_role_id_404_not_found">Get role by role id 404 not found</a></li>
 <li><a href="#_change_password_404">Change password 404</a></li>
 <li><a href="#_update_my_info_404_department">Update my info 404 department</a></li>
@@ -472,6 +474,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_delete_image_204">Delete image 204</a></li>
 <li><a href="#_delete_department_204">Delete department 204</a></li>
 <li><a href="#_create_role_201">Create role 201</a></li>
+<li><a href="#_update_my_info_404_eventlevel">Update my info 404 eventLevel</a></li>
 <li><a href="#_delete_role_204">Delete role 204</a></li>
 <li><a href="#_delete_department_404_not_found">Delete department 404 not found</a></li>
 <li><a href="#_delete_role_404_not_found">Delete role 404 not found</a></li>
@@ -482,9 +485,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_signup_fail_email_duplicate_409">Signup fail email duplicate 409</a></li>
 <li><a href="#_get_all_department_200">Get all department 200</a></li>
 <li><a href="#_signup_fail_department_not_found_404">Signup fail department not found 404</a></li>
+<li><a href="#_update_event_level_404_not_found">Update event level 404 not found</a></li>
 <li><a href="#_get_role_by_role_id_200">Get role by role id 200</a></li>
+<li><a href="#_delete_event_level_204">Delete event level 204</a></li>
 <li><a href="#_change_password_400_case2">Change password 400 case2</a></li>
 <li><a href="#_update_my_info_404_user">Update my info 404 user</a></li>
+<li><a href="#_create_event_level_409_conflict">Create event level 409 conflict</a></li>
 <li><a href="#_get_image_200">Get image 200</a></li>
 <li><a href="#_create_department_201">Create department 201</a></li>
 <li><a href="#_update_user_role_400">Update user role 400</a></li>
@@ -495,8 +501,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_update_role_404_not_found">Update role 404 not found</a></li>
 <li><a href="#_delete_image_404_user_not_found">Delete image 404 user not found</a></li>
 <li><a href="#_signup_success_201">Signup success 201</a></li>
+<li><a href="#_create_event_level_201">Create event level 201</a></li>
 <li><a href="#_get_my_info_200">Get my info 200</a></li>
+<li><a href="#_delete_event_level_404_not_found">Delete event level 404 not found</a></li>
 <li><a href="#_update_image_204">Update image 204</a></li>
+<li><a href="#_update_event_level_204">Update event level 204</a></li>
+<li><a href="#_get_event_level_by_name_404_not_found">Get event level by name 404 not found</a></li>
 <li><a href="#_get_user_by_email_200">Get user by email 200</a></li>
 <li><a href="#_signin_fail_user_not_found_404">Signin fail user not found 404</a></li>
 <li><a href="#_update_user_role_404_user">Update user role 404 user</a></li>
@@ -536,8 +546,9 @@ CommonException: 해당 userEmail에 해당하는 유저를 찾을 수 없습니
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /users/departments HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /admin/departments HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+X-User-Id: h5TLqUtmzPMsUHBjl7vR58Pz7+udAEYqMVwdGYcWGPxWA3rBi52o13I6
 Content-Length: 53
 Host: localhost:8080
 
@@ -608,7 +619,7 @@ CommonException: 해당 userEmail에 해당하는 유저를 찾을 수 없습니
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /admin/users HTTP/1.1
-X-User-Id: IDxzv6BvOGFxI8lhVraSGSxgv0GvJb3M5B9eoIBttt5cLtDeQsvycn+m
+X-User-Id: ALfo3+0x5BvRpuoSztSHNe/cGEW3vcOcUGZp4SAbhvFO3DEBrZxV3olW
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -617,9 +628,30 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 3060
+Content-Length: 5463
 
-[{"userRole":"ROLE_OWNER","userNo":653,"userName":"testUser0","userEmail":"user0@test.com","userPhone":"010-0000-0000","userDepartment":"dept8"},{"userRole":"ROLE_MEMBER","userNo":654,"userName":"testUser1","userEmail":"user1@test.com","userPhone":"010-0000-0001","userDepartment":"dept7"},{"userRole":"ROLE_OWNER","userNo":655,"userName":"testUser2","userEmail":"user2@test.com","userPhone":"010-0000-0002","userDepartment":"dept9"},{"userRole":"ROLE_OWNER","userNo":656,"userName":"testUser3","userEmail":"user3@test.com","userPhone":"010-0000-0003","userDepartment":"dept5"},{"userRole":"ROLE_ADMIN","userNo":657,"userName":"testUser4","userEmail":"user4@test.com","userPhone":"010-0000-0004","userDepartment":"dept8"},{"userRole":"ROLE_OWNER","userNo":658,"userName":"testUser5","userEmail":"user5@test.com","userPhone":"010-0000-0005","userDepartment":"dept9"},{"userRole":"ROLE_ADMIN","userNo":659,"userName":"testUser6","userEmail":"user6@test.com","userPhone":"010-0000-0006","userDepartment":"dept0"},{"userRole":"ROLE_MEMBER","userNo":660,"userName":"testUser7","userEmail":"user7@test.com","userPhone":"010-0000-0007","userDepartment":"dept5"},{"userRole":"ROLE_MEMBER","userNo":661,"userName":"testUser8","userEmail":"user8@test.com","userPhone":"010-0000-0008","userDepartment":"dept3"},{"userRole":"ROLE_MEMBER","userNo":662,"userName":"testUser9","userEmail":"user9@test.com","userPhone":"010-0000-0009","userDepartment":"dept9"},{"userRole":"ROLE_ADMIN","userNo":663,"userName":"testUser10","userEmail":"user10@test.com","userPhone":"010-0000-00010","userDepartment":"dept4"},{"userRole":"ROLE_MEMBER","userNo":664,"userName":"testUser11","userEmail":"user11@test.com","userPhone":"010-0000-00011","userDepartment":"dept4"},{"userRole":"ROLE_MEMBER","userNo":665,"userName":"testUser12","userEmail":"user12@test.com","userPhone":"010-0000-00012","userDepartment":"dept9"},{"userRole":"ROLE_OWNER","userNo":666,"userName":"testUser13","userEmail":"user13@test.com","userPhone":"010-0000-00013","userDepartment":"dept2"},{"userRole":"ROLE_MEMBER","userNo":667,"userName":"testUser14","userEmail":"user14@test.com","userPhone":"010-0000-00014","userDepartment":"dept0"},{"userRole":"ROLE_MEMBER","userNo":668,"userName":"testUser15","userEmail":"user15@test.com","userPhone":"010-0000-00015","userDepartment":"dept1"},{"userRole":"ROLE_ADMIN","userNo":669,"userName":"testUser16","userEmail":"user16@test.com","userPhone":"010-0000-00016","userDepartment":"dept4"},{"userRole":"ROLE_MEMBER","userNo":670,"userName":"testUser17","userEmail":"user17@test.com","userPhone":"010-0000-00017","userDepartment":"dept9"},{"userRole":"ROLE_ADMIN","userNo":671,"userName":"testUser18","userEmail":"user18@test.com","userPhone":"010-0000-00018","userDepartment":"dept2"},{"userRole":"ROLE_OWNER","userNo":672,"userName":"testUser19","userEmail":"user19@test.com","userPhone":"010-0000-00019","userDepartment":"dept9"},{"userRole":"ROLE_ADMIN","userNo":673,"userName":"admin","userEmail":"admin@test.com","userPhone":"010-4444-3333","userDepartment":"dept1"}]</code></pre>
+[{"userRole":"ROLE_MEMBER","userNo":1,"userName":"testUser0","userEmail":"user0@test.com","userPhone":"010-0000-0000","department":{"departmentId":"dept5","departmentName":"부서명5"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_MEMBER","userNo":2,"userName":"testUser1","userEmail":"user1@test.com","userPhone":"010-0000-0001","department":{"departmentId":"dept1","departmentName":"부서명1"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_ADMIN","userNo":3,"userName":"testUser2","userEmail":"user2@test.com","userPhone":"010-0000-0002","department":{"departmentId":"dept8","departmentName":"부서명8"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_MEMBER","userNo":4,"userName":"testUser3","userEmail":"user3@test.com","userPhone":"010-0000-0003","department":{"departmentId":"dept3","departmentName":"부서명3"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_OWNER","userNo":5,"userName":"testUser4","userEmail":"user4@test.com","userPhone":"010-0000-0004","department":{"departmentId":"dept1","departmentName":"부서명1"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_OWNER","userNo":6,"userName":"testUser5","userEmail":"user5@test.com","userPhone":"010-0000-0005","department":{"departmentId":"dept5","departmentName":"부서명5"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_ADMIN","userNo":7,"userName":"testUser6","userEmail":"user6@test.com","userPhone":"010-0000-0006","department":{"departmentId":"dept1","departmentName":"부서명1"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_OWNER","userNo":8,"userName":"testUser7","userEmail":"user7@test.com","userPhone":"010-0000-0007","department":{"departmentId":"dept2","departmentName":"부서명2"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_ADMIN","userNo":9,"userName":"testUser8","userEmail":"user8@test.com","userPhone":"010-0000-0008","department":{"departmentId":"dept2","departmentName":"부서명2"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_ADMIN","userNo":10,"userName":"testUser9","userEmail":"user9@test.com","userPhone":"010-0000-0009","department":{"departmentId":"dept8","departmentName":"부서명8"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_OWNER","userNo":11,"userName":"testUser10","userEmail":"user10@test.com","userPhone":"010-0000-00010","department":{"departmentId":"dept8","departmentName":"부서명8"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_ADMIN","userNo":12,"userName":"testUser11","userEmail":"user11@test.com","userPhone":"010-0000-00011","department":{"departmentId":"dept4","departmentName":"부서명4"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_OWNER","userNo":13,"userName":"testUser12","userEmail":"user12@test.com","userPhone":"010-0000-00012","department":{"departmentId":"dept9","departmentName":"부서명9"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_ADMIN","userNo":14,"userName":"testUser13","userEmail":"user13@test.com","userPhone":"010-0000-00013","department":{"departmentId":"dept1","departmentName":"부서명1"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_MEMBER","userNo":15,"userName":"testUser14","userEmail":"user14@test.com","userPhone":"010-0000-00014","department":{"departmentId":"dept6","departmentName":"부서명6"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_OWNER","userNo":16,"userName":"testUser15","userEmail":"user15@test.com","userPhone":"010-0000-00015","department":{"departmentId":"dept7","departmentName":"부서명7"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_OWNER","userNo":17,"userName":"testUser16","userEmail":"user16@test.com","userPhone":"010-0000-00016","department":{"departmentId":"dept9","departmentName":"부서명9"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_MEMBER","userNo":18,"userName":"testUser17","userEmail":"user17@test.com","userPhone":"010-0000-00017","department":{"departmentId":"dept5","departmentName":"부서명5"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_MEMBER","userNo":19,"userName":"testUser18","userEmail":"user18@test.com","userPhone":"010-0000-00018","department":{"departmentId":"dept7","departmentName":"부서명7"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_ADMIN","userNo":20,"userName":"testUser19","userEmail":"user19@test.com","userPhone":"010-0000-00019","department":{"departmentId":"dept9","departmentName":"부서명9"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}},{"userRole":"ROLE_ADMIN","userNo":21,"userName":"admin","userEmail":"admin@test.com","userPhone":"010-4444-3333","department":{"departmentId":"dept1","departmentName":"부서명1"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}}]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_get_event_level_by_name_200">Get event level by name 200</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /users/event-levels/CRITICAL HTTP/1.1
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 58
+
+{"levelName":"CRITICAL","levelDetails":"치명적 오류"}</code></pre>
 </div>
 </div>
 </div>
@@ -630,7 +662,7 @@ Content-Length: 3060
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /users/me HTTP/1.1
-X-User-Id: OsqjIhvGrlWAqU8RKOL/WywgEvFBalrG+PdWFkIZalxInqjArRR15pNb
+X-User-Id: mVj5ES29zcR6un00jdA/d7Hemdk4XYVhQjkmWQp8k1VhJ2SYyI4x3ec8
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -669,11 +701,11 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: vnntKhMjVByXLcnCSa5riYbEvgPiXL4YOcTAi97NrqaD059sZiwqclRC
-Content-Length: 79
+X-User-Id: 80v7Ng8n6cq3+49NZQD/JLbnwSBNrgU44H6ZdsLFNyYXAiKyin2PgaPv
+Content-Length: 99
 Host: localhost:8080
 
-{"userName":"testUser1","userPhone":"010-1234-5678","userDepartmentId":"dept1"}</code></pre>
+{"userName":"testUser1","userPhone":"010-1234-5678","userDepartmentId":"dept3","eventLevel":"INFO"}</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -690,7 +722,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me/password HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: i5RxUtF/oP7bUeOcN1M9+JSMkdvr9tPIv4AFBljsAxapUMnjQTqKSU9N
+X-User-Id: 8T1mYD9viJKZimOsUNoV2W1vEcHOCD1OnbGz81CuafRpWeo22GFpNAyc
 Content-Length: 118
 Host: localhost:8080
 
@@ -775,6 +807,27 @@ userEmail=user1%40test.com&amp;imagePath=images%2Fpath</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_get_all_event_level_200">Get all event level 200</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /users/event-levels HTTP/1.1
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 170
+
+[{"levelName":"INFO","levelDetails":"일반 정보"},{"levelName":"CRITICAL","levelDetails":"치명적 오류"},{"levelName":"WARNING","levelDetails":"위험한 정보"}]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_get_role_by_role_id_404_not_found">Get role by role id 404 not found</h2>
 <div class="sectionbody">
 <div class="listingblock">
@@ -802,7 +855,7 @@ CommonException: RoleId에 해당하는 Role은 존재하지 않습니다.</code
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me/password HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: caJOi5YbvSuDgSl9WqPAoJVRYgyhzLmGks8kaiJfzkB8iEJPuYjSFyfSJw==
+X-User-Id: HNwDBBHa4G0qAHvhuhbFaBEozOzvTpFoLje4mlKqiMSeZ2bc5rYSFX/yfQ==
 Content-Length: 118
 Host: localhost:8080
 
@@ -827,11 +880,11 @@ CommonException: 해당 userEmail에 해당하는 유저를 찾을 수 없습니
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: X5bSGnqvh78vkfCkj8lG/piDKiO2TDZbQ73qny4TrExs+4Ja7z1ATrWL
-Content-Length: 80
+X-User-Id: TwbzH0NQzTTJyKlOHwhhvxBCOOdYAmgHK33Dbij7qXZ28d38rC/RwFAL
+Content-Length: 100
 Host: localhost:8080
 
-{"userName":"testUser1","userPhone":"010-1234-5678","userDepartmentId":"dept20"}</code></pre>
+{"userName":"testUser1","userPhone":"010-1234-5678","userDepartmentId":"dept20","eventLevel":"info"}</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -840,7 +893,7 @@ Host: localhost:8080
 Content-Type: text/plain;charset=UTF-8
 Content-Length: 53
 
-CommonException: 존재하지 않는 부서입니다.</code></pre>
+CommonException: 존재하지 않는 부서 아이디</code></pre>
 </div>
 </div>
 </div>
@@ -876,11 +929,11 @@ Bad Request: userPassword - must match "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&am
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: GvwemKCdeB9L2KExoRfTIb4Js24DXstKLGNN/I4ZvTjqINvcmtcchDIQ
-Content-Length: 78
+X-User-Id: 2LcVEYcYZK1LjJrXSYAihZIKtPCORv/GqlpKBIZf0gdenhueeDPKyZiw
+Content-Length: 98
 Host: localhost:8080
 
-{"userName":"testUser1","userPhone":"0101234-5678","userDepartmentId":"dept1"}</code></pre>
+{"userName":"testUser1","userPhone":"0101234-5678","userDepartmentId":"dept1","eventLevel":"info"}</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -946,8 +999,9 @@ CommonException: 해당 userEmail에 해당하는 유저를 찾을 수 없습니
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /users/roles HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /admin/roles HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+X-User-Id: XwedoiSgSf+tU65+Z1KKgrZ0hRQDqj0e1+ooOFOAWBlWDSJ232BeqdIX
 Content-Length: 51
 Host: localhost:8080
 
@@ -972,7 +1026,7 @@ CommonException: 이미 존재하는 RoldId입니다.</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/users/roles HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: SKNDnbEscCgstqhW+VCgSiiYa8fvQZbE77znvSuQXdyH25TfCK13EK9Y
+X-User-Id: VVnu71ElVrmVo1xXFXqhbRY8I2Ku8MY9aHP1OUGn4Ttz74AaIskqeXo0
 Content-Length: 49
 Host: localhost:8080
 
@@ -991,8 +1045,9 @@ Host: localhost:8080
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/departments HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/departments HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+X-User-Id: yJNAVFJIgOmH4B7bite6jurnbfUhGGfVnDM6qkotutOzDhRwtoyEzX3V
 Content-Length: 53
 Host: localhost:8080
 
@@ -1034,7 +1089,7 @@ Content-Length: 54
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me/password HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: WrCKMv0Q/JI6PQcq6PgUPFrA/LdKtG0FV8E7AAoZ4FQzz7AuM8JH3j5g
+X-User-Id: pEI+vrAq19rjIM8IJCirZVEapCMU132qPh5DPVNE3zSDxvWejTFQlfpF
 Content-Length: 114
 Host: localhost:8080
 
@@ -1054,7 +1109,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /admin/users/user20@test.com HTTP/1.1
-X-User-Id: TDiX0CXn2Z8MVmTNpf9ts1Cy4NdE4W20qEBg1K9phZAYomI5Vlg6ETDt
+X-User-Id: 2f+TXGywfwBq+t8nHRYR/ky5XzQR3kNCLRtweTC2pz4RgKIfaILqcXTW
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1077,7 +1132,7 @@ CommonException: 해당 userEmail에 해당하는 유저를 찾을 수 없습니
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /users/me HTTP/1.1
-X-User-Id: uQsP6nj+xSHQgE2xjALW9RKXIESEOTuxNHdxQBtB9NB97LmJoHePa7GKjQ==
+X-User-Id: QYW+617/b9YuTB7PZPu9Plj+q5D6mtrUlUReHyiWc2OdHI2yLJhf5aEQww==
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1115,7 +1170,8 @@ Host: localhost:8080</code></pre>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /users/departments/dept1 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /admin/departments/dept1 HTTP/1.1
+X-User-Id: t9SHm6fuRmpd8OoBg8gXITX4BfKcOGvbmiDVt6RphD0nMJf5RZR1HY9s
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1132,8 +1188,9 @@ Host: localhost:8080</code></pre>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /users/roles HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /admin/roles HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+X-User-Id: UiITH+0mjXOwvCJexlMBWfjW9DqfRqzbqdNLVqRg4eAoVn5ZJ2QpS1A+
 Content-Length: 52
 Host: localhost:8080
 
@@ -1148,11 +1205,37 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect1">
+<h2 id="_update_my_info_404_eventlevel">Update my info 404 eventLevel</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+X-User-Id: LrpFG1bwAfqfYkkL+WvUHuumOi9/TAlBMUHHZLzn5WR3vqg2JtXVXjo2
+Content-Length: 100
+Host: localhost:8080
+
+{"userName":"testUser1","userPhone":"010-1234-5678","userDepartmentId":"dept20","eventLevel":"test"}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 53
+
+CommonException: 존재하지 않는 부서 아이디</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_delete_role_204">Delete role 204</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /users/roles/ROLE_MEMBER HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /admin/roles/ROLE_MEMBER HTTP/1.1
+X-User-Id: +SqJIGIf0EieSJye/gKKzzFFLW1HY5vrFokCusNeSIxqfe30hy6t+1gq
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1169,7 +1252,8 @@ Host: localhost:8080</code></pre>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /users/departments/testDept HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /admin/departments/testDept HTTP/1.1
+X-User-Id: gnFm8NdiNBxVkP/5KMN/t3SddsSyZMcPe3I/CJiLv5Kr0Uf9t/47sbQR
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1190,7 +1274,8 @@ CommonException: 존재하는 않는 departmentId입니다.</code></pre>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /users/roles/ROLE_TEST HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /admin/roles/ROLE_TEST HTTP/1.1
+X-User-Id: vafIzjMpYiu08eZSQrV1s/M52OebK55fVOKxw8wur/TGklqH+ZqEzPps
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1211,8 +1296,9 @@ CommonException: 존재하지 않는 RoldId입니다.</code></pre>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/roles HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/roles HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+X-User-Id: 4f6KdDeWaZTJUutByzkXHoAgrhC+NrFHS1EHLIvFo1OJS954rtPJCLi0
 Content-Length: 54
 Host: localhost:8080
 
@@ -1232,7 +1318,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /admin/users HTTP/1.1
-X-User-Id: hoauXD5uMfDx16l8mI1yVO7TZihKiD58dHTezdSHJC71sR1FVPqwczD+
+X-User-Id: YUwtFUDvGPZXMU3hqRzBh2QO9F2Vr8vCUFotIF42Xy7LhOp1GVeYnOhU
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1251,7 +1337,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me/password HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: TdG1RCyCAWkqNoswOEwK4KyeysgjjqUVpTfQa504S6kK4ZTpd1YxEYwJ
+X-User-Id: PjbKhTGYYVI6/36o68uV1D27/n8/clZ5bK7wcWCR74rnmeArr1iR6iq8
 Content-Length: 114
 Host: localhost:8080
 
@@ -1276,7 +1362,7 @@ Bad Request: newPassword - 비밀번호는 영문, 숫자, 특수문자를 포�
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/users/roles HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: 0XHThDXpshnpC88wrXZscWP2XNBEp4u4qS5m1k4i8Tf/lLGxftRD34Zv
+X-User-Id: e8+8w5R6jA3yYYvH+WdTMeFHaHwrdzKXJkql/L+Cu5lH93cvZ8OAZpx1
 Content-Length: 48
 Host: localhost:8080
 
@@ -1364,6 +1450,31 @@ CommonException: 존재하지 않는 부서입니다.</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_update_event_level_404_not_found">Update event level 404 not found</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/event-levels HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+X-User-Id: VsYg16jTdA00w07IA4zMo7hagqipK2Nz2Tl/ltvongi24BO6LdSp9nNO
+Content-Length: 54
+Host: localhost:8080
+
+{"levelName":"UNKNOWN","levelDetails":"없는 레벨"}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 53
+
+CommonException: 존재하지 않는 이벤트 레벨</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_get_role_by_role_id_200">Get role by role id 200</h2>
 <div class="sectionbody">
 <div class="listingblock">
@@ -1385,13 +1496,31 @@ Content-Length: 51
 </div>
 </div>
 <div class="sect1">
+<h2 id="_delete_event_level_204">Delete event level 204</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /admin/event-levels/WARNING HTTP/1.1
+X-User-Id: 1BUHlS5BAG4n6ziAwBkDRpzrpEN/WnYx6bqaDI849NFpobGJswAEDEzH
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_change_password_400_case2">Change password 400 case2</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me/password HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: Oi+pNonxbPFhpDFVNak6977Ik/Xh3gbbWLpBBL9IT4FucB4hB2NS2yKa
+X-User-Id: fidwBulFihY9JsumzS9vOCZhczzuNQqjItdrJRSv2AkFriQ5pCfMGTo7
 Content-Length: 120
 Host: localhost:8080
 
@@ -1416,11 +1545,11 @@ CommonException: 확인 패스워드 불일치</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: UvlyVx7TgoURzN9dSPJBLaOecUZ/0AhGU81zGXoZNE0lZbKPlme9T2M5/Q==
-Content-Length: 79
+X-User-Id: cP1rhCLWwyvyjgbfK4IaPs4VK7mHi02tHZjkOxCyurkJeyJP+n9i7nOJFA==
+Content-Length: 99
 Host: localhost:8080
 
-{"userName":"testUser1","userPhone":"010-1234-5678","userDepartmentId":"dept1"}</code></pre>
+{"userName":"testUser1","userPhone":"010-1234-5678","userDepartmentId":"dept1","eventLevel":"info"}</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1430,6 +1559,31 @@ Content-Type: text/plain;charset=UTF-8
 Content-Length: 84
 
 CommonException: 해당 userEmail에 해당하는 유저를 찾을 수 없습니다.</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_event_level_409_conflict">Create event level 409 conflict</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /admin/event-levels HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+X-User-Id: hep8nQq5d0+9MgN+3lamZb+V3BS00E0hsT8mrk7wuKT24goYomlqbrfU
+Content-Length: 58
+Host: localhost:8080
+
+{"levelName":"CRITICAL","levelDetails":"중복된 레벨"}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 409 Conflict
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 47
+
+CommonException: 이미 존재하는 eventLevel</code></pre>
 </div>
 </div>
 </div>
@@ -1461,8 +1615,9 @@ Content-Length: 34
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /users/departments HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /admin/departments HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+X-User-Id: Jhx6uS0s23uqzuZ4P7lfbrCzHCf6PV+vyhWtQBShLWMRDfy+G67hjipe
 Content-Length: 56
 Host: localhost:8080
 
@@ -1483,7 +1638,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/users/roles HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: ads8t/sSoxf33YUoLywbDT05qCUCRXYtOVN73CnV5QRtHMy2KL1idluA
+X-User-Id: o8aMVV2FHo7tEUasfop7scVrYMxX5qN9tWxZ1mHrEX2R2MWualhp63lJ
 Content-Length: 48
 Host: localhost:8080
 
@@ -1507,7 +1662,7 @@ Bad Request: userId - must be a well-formed email address;</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /users/me HTTP/1.1
-X-User-Id: 7RZolUIyzE6NHz9FzzFeTi94pwQAAOytqpQp5BjBcXZ7FFPKaxutyVE7nA==
+X-User-Id: lsvoBhq6BX5fjYjPF1YP+iPkOdi0fpAi11cwHmZTLCbUchNwrmBTKGF+2A==
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1575,7 +1730,7 @@ CommonException: 비밀번호 불일치</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /admin/users/user2@test.com HTTP/1.1
-X-User-Id: Oz/UU8MyTj48wG9sOTZ8qbSgCw0EaqR+qtGbnEPZCAGSciP+p1w/y2wE
+X-User-Id: wmbe59VF08SnIhp0LYHBDMEZVSwt2unVtaKv7I+RzQBdIrALHpGc3RPL
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1592,8 +1747,9 @@ Host: localhost:8080</code></pre>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/roles HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/roles HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+X-User-Id: ro8b7ZMAdaAOLNBDKYwjQEx3GAgIBTGO03d11755bQbK0wygep08V+LL
 Content-Length: 52
 Host: localhost:8080
 
@@ -1654,12 +1810,33 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect1">
+<h2 id="_create_event_level_201">Create event level 201</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /admin/event-levels HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+X-User-Id: 1lwXUjrPHICVNz+4Q0cBkYdyI0dmWOjcjm1Sg67lUSZiV00ErT/IjOxE
+Content-Length: 60
+Host: localhost:8080
+
+{"levelName":"UNKNOWN","levelDetails":"정보성 메시지"}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_get_my_info_200">Get my info 200</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /users/me HTTP/1.1
-X-User-Id: +kmUkJpq4OHonYfuSNF1aXDwvdYUSYjcS6gDj0tZLVtaZsxHYk1GvuTG
+X-User-Id: xw1nRU/98J/RF9h9fo5sMm79ZOg5xlSVYc+q5ag4FVFitpkGntQ7O1Xv
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1668,9 +1845,31 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 144
+Content-Length: 258
 
-{"userRole":"ROLE_MEMBER","userNo":885,"userName":"testUser1","userEmail":"user1@test.com","userPhone":"010-0000-0001","userDepartment":"dept7"}</code></pre>
+{"userRole":"ROLE_MEMBER","userNo":2,"userName":"testUser1","userEmail":"user1@test.com","userPhone":"010-0000-0001","department":{"departmentId":"dept1","departmentName":"부서명1"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_delete_event_level_404_not_found">Delete event level 404 not found</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /admin/event-levels/UNKNOWN HTTP/1.1
+X-User-Id: Bi+TlAhQm9FW7riM883u4AVJkUaglQXV+pKMtY/oCnOLUO+BIeh59Vsv
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json
+Content-Length: 53
+
+CommonException: 존재하지 않는 이벤트 레벨</code></pre>
 </div>
 </div>
 </div>
@@ -1697,12 +1896,54 @@ userEmail=user0%40test.com&amp;imagePath=images%2Fpath</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_update_event_level_204">Update event level 204</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/event-levels HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+X-User-Id: PMQCjtKb6g94Zf0yQEy11aZCXzIz+s1G66d+ZipiiehoT6iO/TSZwX8S
+Content-Length: 64
+Host: localhost:8080
+
+{"levelName":"INFO","levelDetails":"수정된 정보 메시지"}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_get_event_level_by_name_404_not_found">Get event level by name 404 not found</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /users/event-levels/UNKNOWN HTTP/1.1
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json
+Content-Length: 53
+
+CommonException: 존재하지 않는 이벤트 레벨</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_get_user_by_email_200">Get user by email 200</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /admin/users/user2@test.com HTTP/1.1
-X-User-Id: raDymokjXAC4Z6yhtiPQY9sl57ShaMu2xIRPu4VLjEX0rrmdTI09FYZI
+X-User-Id: cszqO8JDWfTWrWbxxWty1rhRxwuwUaZFU0Bs2T1E0WKAFqIngxXDelp6
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1712,9 +1953,9 @@ Host: localhost:8080</code></pre>
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Disposition: inline;filename=f.txt
 Content-Type: application/json
-Content-Length: 144
+Content-Length: 257
 
-{"userRole":"ROLE_ADMIN","userNo":1222,"userName":"testUser2","userEmail":"user2@test.com","userPhone":"010-0000-0002","userDepartment":"dept3"}</code></pre>
+{"userRole":"ROLE_ADMIN","userNo":3,"userName":"testUser2","userEmail":"user2@test.com","userPhone":"010-0000-0002","department":{"departmentId":"dept8","departmentName":"부서명8"},"eventLevelResponse":{"levelName":"INFO","levelDetails":"일반 정보"}}</code></pre>
 </div>
 </div>
 </div>
@@ -1750,7 +1991,7 @@ CommonException: 해당 userEmail에 해당하는 유저를 찾을 수 없습니
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/users/roles HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-X-User-Id: dz5jELu/x62APWYWrqAya0Oj2WUs+NMaz92hfx3UEKG8yD9RShfRYeFx
+X-User-Id: cYoFJNi3U33nIKpWJKnYIBUUwXNtjkz3bt73x8cT5wvRLn7rA4QsHWra
 Content-Length: 50
 Host: localhost:8080
 
@@ -1794,8 +2035,9 @@ CommonException: departmentId에 해당 하는 department는 존재하지 않습
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /users/departments HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /admin/departments HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+X-User-Id: EVedeaJxfzxPGvFLVE+WgqTxuIl7ITL3G6FNnCaq7k/omFuCh7C++g+h
 Content-Length: 56
 Host: localhost:8080
 
@@ -1816,7 +2058,7 @@ CommonException: departmentId에 해당 하는 department는 존재하지 않습
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-04-29 00:22:13 +0900
+Last updated 2025-05-06 20:48:38 +0900
 </div>
 </div>
 </body>

@@ -39,3 +39,9 @@ public class UserLoginRequest {
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{6,20}")
     String userPassword;
 }
+
+
+
+
+
+

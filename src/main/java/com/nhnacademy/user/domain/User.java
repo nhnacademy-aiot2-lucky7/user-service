@@ -1,6 +1,7 @@
 package com.nhnacademy.user.domain;
 
 import com.nhnacademy.department.domain.Department;
+import com.nhnacademy.eventlevel.domain.EventLevel;
 import com.nhnacademy.image.domain.Image;
 import com.nhnacademy.role.domain.Role;
 import jakarta.persistence.*;
@@ -41,14 +42,18 @@ public class User {
     @Comment("사용자 연락처")
     private String userPhone;
 
-    @Column(name = "createdAt", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "withdrawalAt")
+    @Column(name = "withdrawal_at")
     private LocalDateTime withdrawalAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "level_name", nullable = false)
+    private EventLevel eventLevel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
@@ -63,13 +68,14 @@ public class User {
     private Department department;
 
     private User(String userName, String userEmail, String userPassword,
-                 String userPhone, Department department, Role role) {
+                 String userPhone, Department department, Role role, EventLevel eventLevel) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userPhone = userPhone;
         this.department = department;
         this.role = role;
+        this.eventLevel = eventLevel;
     }
 
     public static User ofNewMember(String userName, String userEmail, String userPassword,
@@ -80,7 +86,9 @@ public class User {
                 userPassword,
                 userPhone,
                 department,
-                new Role("ROLE_MEMBER", "멤버"));
+                new Role("ROLE_MEMBER", "멤버"),
+                new EventLevel("INFO", "일반 정보", 1)
+        );
     }
 
     // 비밀번호 변경 메서드
@@ -93,10 +101,11 @@ public class User {
         this.role = userRole;
     }
 
-    public void updateUser(String userName, String userPhone, Department department) {
+    public void updateUser(String userName, String userPhone, Department department, EventLevel eventLevel) {
         this.userName = userName;
         this.userPhone = userPhone;
         this.department = department;
+        this.eventLevel = eventLevel;
     }
 
     // 사용자 프로필 이미지 변경

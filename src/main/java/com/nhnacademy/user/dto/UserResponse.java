@@ -1,5 +1,7 @@
 package com.nhnacademy.user.dto;
 
+import com.nhnacademy.department.dto.DepartmentResponse;
+import com.nhnacademy.eventlevel.dto.EventLevelResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +22,7 @@ public class UserResponse {
 
     String userPhone;
 
-    String userDepartment;
+    DepartmentResponse department;
+
+    EventLevelResponse eventLevelResponse;
 }
