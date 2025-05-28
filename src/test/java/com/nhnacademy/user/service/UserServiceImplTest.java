@@ -65,7 +65,7 @@ class UserServiceImplTest {
         Mockito.when(userRepository.existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(false);
         Mockito.when(departmentRepository.existsById(Mockito.anyString())).thenReturn(true);
 
-        userService.createUser(userRegisterRequest);
+        userService.createUser(userRegisterRequest, false);
 
         Mockito.verify(userRepository, Mockito.times(1)).existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
         Mockito.verify(passwordEncoder, Mockito.times(1)).encode(Mockito.anyString());
@@ -85,7 +85,7 @@ class UserServiceImplTest {
 
         Mockito.when(userRepository.existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(true);
 
-        Assertions.assertThrows(ConflictException.class, () -> userService.createUser(userRegisterRequest));
+        Assertions.assertThrows(ConflictException.class, () -> userService.createUser(userRegisterRequest, false));
 
         Mockito.verify(userRepository, Mockito.times(1)).existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
         Mockito.verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
@@ -105,7 +105,7 @@ class UserServiceImplTest {
         Mockito.when(userRepository.existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString())).thenReturn(false);
         Mockito.when(departmentRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(NotFoundException.class, () -> userService.createUser(userRegisterRequest));
+        Assertions.assertThrows(NotFoundException.class, () -> userService.createUser(userRegisterRequest, false));
 
         Mockito.verify(userRepository, Mockito.times(1)).existsByUserEmailAndWithdrawalAtIsNull(Mockito.anyString());
         Mockito.verify(userRepository, Mockito.never()).save(Mockito.any(User.class));

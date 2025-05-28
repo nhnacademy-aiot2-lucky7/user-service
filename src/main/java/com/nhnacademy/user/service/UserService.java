@@ -21,7 +21,7 @@ public interface UserService {
      *
      * @param userRegisterRequest 사용자 등록 요청 DTO
      */
-    void createUser(UserRegisterRequest userRegisterRequest);
+    void createUser(UserRegisterRequest userRegisterRequest, boolean isSocialed);
 
     /**
      * 사용자 이메일을 기반으로 사용자 정보를 조회합니다.
@@ -97,4 +97,6 @@ public interface UserService {
     List<UserResponse> getAllUser(Pageable pageable);
 
     List<UserResponse> getUsersByDepartmentId(String departmentId, Pageable pageable);
+
+    boolean existsByUserEmail(String userEmail);
 }
