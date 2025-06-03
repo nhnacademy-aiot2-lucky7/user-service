@@ -27,7 +27,28 @@ public class UserController {
      */
     @PostMapping("/auth/signUp")
     public ResponseEntity<Void> signUp(@Validated @RequestBody UserRegisterRequest userRegisterRequest) {
-        userService.createUser(userRegisterRequest);
+        boolean isSocialed = false;
+
+        userService.createUser(userRegisterRequest, isSocialed);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
+    }
+
+    @PostMapping("/auth/social/signUp")
+    public ResponseEntity<Void> socialSignUp(@Validated @RequestBody SocialUserRegisterRequest socialUserRegisterRequest) {
+        boolean isSocialed = true;
+
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest(
+                socialUserRegisterRequest.getUserName(),
+                socialUserRegisterRequest.getUserEmail(),
+                socialUserRegisterRequest.getUserPassword(),
+                socialUserRegisterRequest.getUserPhone(),
+                socialUserRegisterRequest.getUserDepartment()
+        );
+
+        userService.createUser(userRegisterRequest, isSocialed);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -47,6 +68,11 @@ public class UserController {
         return ResponseEntity
                 .ok()
                 .build();
+    }
+
+    @GetMapping("/{userEmail}")
+    public Boolean existsByEmail(@PathVariable String userEmail) {
+        return userService.existsByUserEmail(userEmail);
     }
 
     /**

@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
      * @throws NotFoundException 등록 후 사용자 조회 실패 시
      */
     @Override
-    public void createUser(UserRegisterRequest registerUserRequest) {
+    public void createUser(UserRegisterRequest registerUserRequest, boolean isSocialed) {
         log.debug("회원가입 시작! 회원 정보: {}", registerUserRequest);
 
         boolean isExistsEmail = userRepository.existsByUserEmailAndWithdrawalAtIsNull(registerUserRequest.getUserEmail());
@@ -64,15 +64,25 @@ public class UserServiceImpl implements UserService {
         }
         Department department = departmentRepository.getReferenceById(registerUserRequest.getUserDepartment());
 
-        String encodePassword = passwordEncoder.encode(registerUserRequest.getUserPassword());
+        User user = null;
+        if (isSocialed) {
+            user = User.ofNewSocialMember(registerUserRequest.getUserName(),
+                    registerUserRequest.getUserEmail(),
+                    registerUserRequest.getUserPassword(),
+                    registerUserRequest.getUserPhone(),
+                    department
+            );
+        } else {
+            String encodePassword = passwordEncoder.encode(registerUserRequest.getUserPassword());
 
-        User user = User.ofNewMember(
-                registerUserRequest.getUserName(),
-                registerUserRequest.getUserEmail(),
-                encodePassword,
-                registerUserRequest.getUserPhone(),
-                department
-        );
+            user = User.ofNewMember(
+                    registerUserRequest.getUserName(),
+                    registerUserRequest.getUserEmail(),
+                    encodePassword,
+                    registerUserRequest.getUserPhone(),
+                    department
+            );
+        }
 
         userRepository.save(user);
     }
@@ -134,6 +144,10 @@ public class UserServiceImpl implements UserService {
         log.debug("로그인 시작! 회원 이메일: {}", userLoginRequest.getUserEmail());
         User getUser = userRepository.findByUserEmailAndWithdrawalAtIsNull(userLoginRequest.getUserEmail())
                 .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는 유저를 찾을 수 없습니다."));
+
+        if (Boolean.TRUE.equals(getUser.getIsSocialed()) || getUser.getUserPassword() == null) {
+            throw new UnauthorizedException("소셜 로그인 사용자입니다.");
+        }
 
         if (!passwordEncoder.matches(userLoginRequest.getUserPassword(), getUser.getUserPassword())) {
             throw new UnauthorizedException("비밀번호 불일치");
@@ -239,5 +253,10 @@ public class UserServiceImpl implements UserService {
 
         getUser.updateWithdrawalAt();
         userRepository.save(getUser);
+    }
+
+    @Override
+    public boolean existsByUserEmail(String userEmail) {
+        return userRepository.existsByUserEmailAndWithdrawalAtIsNull(userEmail);
     }
 }
