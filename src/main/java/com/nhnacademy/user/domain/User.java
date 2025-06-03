@@ -34,13 +34,17 @@ public class User {
     @Comment("사용자 이메일")
     private String userEmail;
 
-    @Column(name = "user_password", length = 200, nullable = false)
+    @Column(name = "user_password", length = 200)
     @Comment("사용자 비밀번호")
     private String userPassword;
 
     @Column(name = "user_phone", length = 30, nullable = false)
     @Comment("사용자 연락처")
     private String userPhone;
+
+    @Column(name = "is_socialed", nullable = false)
+    @Comment("소셜 로그인 여부")
+    private Boolean isSocialed;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -68,11 +72,12 @@ public class User {
     private Department department;
 
     private User(String userName, String userEmail, String userPassword,
-                 String userPhone, Department department, Role role, EventLevel eventLevel) {
+                 String userPhone, Boolean isSocialed, Department department, Role role, EventLevel eventLevel) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userPhone = userPhone;
+        this.isSocialed = isSocialed;
         this.department = department;
         this.role = role;
         this.eventLevel = eventLevel;
@@ -85,6 +90,21 @@ public class User {
                 userEmail,
                 userPassword,
                 userPhone,
+                false,
+                department,
+                new Role("ROLE_MEMBER", "멤버"),
+                new EventLevel("INFO", "일반 정보", 1)
+        );
+    }
+
+    public static User ofNewSocialMember(String userName, String userEmail, String userPassword,
+                                         String userPhone, Department department) {
+        return new User(
+                userName,
+                userEmail,
+                userPassword,
+                userPhone,
+                true,
                 department,
                 new Role("ROLE_MEMBER", "멤버"),
                 new EventLevel("INFO", "일반 정보", 1)

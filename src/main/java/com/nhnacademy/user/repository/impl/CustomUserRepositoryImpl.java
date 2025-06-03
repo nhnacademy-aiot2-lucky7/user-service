@@ -90,7 +90,17 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                         qUser.userName,
                         qUser.userEmail,
                         qUser.userPhone,
-                        qUser.department.departmentId
+                        Projections.constructor(
+                                DepartmentResponse.class,
+                                qUser.department.departmentId,
+                                qUser.department.departmentName
+                        ),
+                        Projections.constructor(
+                                EventLevelResponse.class,
+                                qUser.eventLevel.eventLevelName,
+                                qUser.eventLevel.eventLevelDetails,
+                                qUser.eventLevel.priority
+                        )
                 ))
                 .from(qUser)
                 .where(qUser.department.departmentId.eq(departmentId)

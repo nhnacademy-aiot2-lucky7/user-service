@@ -49,7 +49,7 @@ class UserControllerTest {
                         .content(new ObjectMapper().writeValueAsString(userRegisterRequest)))
                 .andExpect(status().isCreated());
 
-        verify(userService, times(1)).createUser(any(UserRegisterRequest.class));
+        verify(userService, times(1)).createUser(any(UserRegisterRequest.class), anyBoolean());
     }
 
     @Test
@@ -68,7 +68,7 @@ class UserControllerTest {
                         .content(new ObjectMapper().writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
 
-        verify(userService, never()).createUser(any(UserRegisterRequest.class));
+        verify(userService, never()).createUser(any(UserRegisterRequest.class), anyBoolean());
     }
 
     @Test
