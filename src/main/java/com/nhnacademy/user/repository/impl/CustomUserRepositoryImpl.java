@@ -8,9 +8,12 @@ import com.nhnacademy.user.dto.UserResponse;
 import com.nhnacademy.user.repository.CustomUserRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +23,12 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
         super(User.class);
     }
 
+    @PersistenceContext
+    EntityManager entityManager;
+
     @Override
     public Optional<UserResponse> findUserResponseByUserEmail(String userEmail) {
-        JPAQuery<UserResponse> query = new JPAQuery<>(getEntityManager());
+        JPAQuery<UserResponse> query = new JPAQuery<>(entityManager);
         QUser qUser = QUser.user;
 
         return Optional.ofNullable(query
@@ -50,7 +56,7 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public Optional<List<UserResponse>> findAllUserResponse(Pageable pageable) {
+    public Optional<List<UserResponse>> findAllUserResponse(Pageable pageable, String role, LocalDateTime createdAt) {
         QUser qUser = QUser.user;
 
         return Optional.of(new JPAQuery<UserResponse>(getEntityManager())

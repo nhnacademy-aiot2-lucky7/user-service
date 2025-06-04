@@ -50,8 +50,9 @@ public class ImageController {
      * @param imagePath 수정할 이미지 경로
      * @return 204 No Content
      */
-    @PutMapping
-    public ResponseEntity<Void> updateImage(@RequestParam String userEmail, @RequestParam String imagePath) {
+    @PutMapping("/{user-email}")
+    @HasRole(value={"admin"})
+    public ResponseEntity<Void> updateImage(@PathVariable("user-email") String userEmail, @RequestParam String imagePath) {
         imageService.updateImage(userEmail, imagePath);
 
         return ResponseEntity
