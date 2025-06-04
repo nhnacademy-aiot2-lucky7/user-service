@@ -6,7 +6,7 @@ WORKDIR /app
 ARG GITHUB_ACTOR
 ARG GITHUB_TOKEN
 
-# settings.xml 복사
+# settings.xml 복사, aes utils 사용 안 하면 빼세요
 COPY .m2/settings.xml /root/.m2/settings.xml
 
 # 소스 복사
