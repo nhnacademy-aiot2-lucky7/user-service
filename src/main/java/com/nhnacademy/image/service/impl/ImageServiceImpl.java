@@ -38,11 +38,8 @@ public class ImageServiceImpl implements ImageService {
                 .orElseThrow(() -> new NotFoundException("해당 userEmail에 해당하는 유저를 찾을 수 없습니다."));
 
         Image profileImage = user.getProfileImage();
-        if (Objects.isNull(profileImage)) {
-            throw new NotFoundException("해당 유저의 프로필 이미지가 등록되어 있지 않습니다.");
-        }
 
-        return new ImageResponse(profileImage.getImagePath());
+        return profileImage == null ? null : new ImageResponse(profileImage.getImagePath());
     }
 
     /**
