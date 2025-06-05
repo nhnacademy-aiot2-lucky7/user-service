@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/departments/all")
+@RequestMapping("/departments")
 @RequiredArgsConstructor
 public class DepartmentController {
     private final DepartmentService departmentService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<DepartmentResponse>> getAllDepartment() {
         return ResponseEntity
                 .ok(departmentService.getAllDepartment());
