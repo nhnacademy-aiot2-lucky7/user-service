@@ -56,7 +56,7 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public Optional<List<UserResponse>> findAllUserResponse(Pageable pageable, String role, LocalDateTime createdAt) {
+    public Optional<List<UserResponse>> findAllUserResponse(Pageable pageable) {
         QUser qUser = QUser.user;
 
         return Optional.of(new JPAQuery<UserResponse>(getEntityManager())
