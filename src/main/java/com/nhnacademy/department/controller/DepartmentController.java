@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/departments")
+@RequestMapping("/departments/all")
 @RequiredArgsConstructor
 public class DepartmentController {
     private final DepartmentService departmentService;
