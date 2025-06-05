@@ -45,8 +45,11 @@ public class AdminAuthorizationFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String uri = httpRequest.getRequestURI();
 
+        log.info("adminFilter out: {}", uri);
+
         // /admin으로 시작하면 관리자 권한 체크
         if (uri.startsWith("/admin")) {
+            log.info("adminFilter in: {}", uri);
             String encryptedEmail = httpRequest.getHeader("X-User-Id");
 
             // 관리자 인증 정보가 없는 경우
