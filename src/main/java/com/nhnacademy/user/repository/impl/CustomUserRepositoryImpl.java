@@ -11,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -92,7 +93,7 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                 .where(qUser.withdrawalAt.isNull())
                 .fetchOne();
 
-        return new PageImpl<>(content, pageable, total);
+        return Optional.of(new PageImpl<>(content, pageable, total));
     }
 
 
