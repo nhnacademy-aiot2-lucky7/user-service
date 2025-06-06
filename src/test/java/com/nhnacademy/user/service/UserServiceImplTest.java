@@ -22,6 +22,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -172,14 +174,20 @@ class UserServiceImplTest {
                 ))
                 .toList();
 
-        Mockito.when(userRepository.findAllUserResponse(pageable))
-                .thenReturn(Optional.of(userResponses));
+        Page<UserResponse> userResponsePage = new PageImpl<>(userResponses, pageable, 100); // 총 100건 중 1~10건
 
-        List<UserResponse> result = userService.getAllUser(pageable);
+        Mockito.when(userRepository.findAllUserResponse(pageable))
+                .thenReturn(Optional.of(userResponsePage));
+
+        // userService.getAllUser()의 반환 타입이 Page<UserResponse>여야 함
+        Page<UserResponse> result = userService.getAllUser(pageable);
 
         Mockito.verify(userRepository, Mockito.times(1)).findAllUserResponse(pageable);
-        Assertions.assertEquals(10, result.size());
+        Assertions.assertEquals(10, result.getContent().size());
+        Assertions.assertEquals(0, result.getNumber()); // page index
+        Assertions.assertEquals(10, result.getSize());  // page size
     }
+
 
     @Test
     @DisplayName("로그인")
