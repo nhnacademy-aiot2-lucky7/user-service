@@ -10,6 +10,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -56,10 +57,11 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public Optional<List<UserResponse>> findAllUserResponse(Pageable pageable) {
+    public Optional<Page<UserResponse>> findAllUserResponse(Pageable pageable) {
         QUser qUser = QUser.user;
 
-        return Optional.of(new JPAQuery<UserResponse>(getEntityManager())
+        // content 쿼리
+        List<UserResponse> content = new JPAQuery<UserResponse>(getEntityManager())
                 .select(Projections.constructor(
                         UserResponse.class,
                         qUser.role.roleId,
@@ -81,8 +83,18 @@ public class CustomUserRepositoryImpl extends QuerydslRepositorySupport implemen
                 .where(qUser.withdrawalAt.isNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch());
+                .fetch();
+
+        // count 쿼리
+        long total = new JPAQuery<Long>(getEntityManager())
+                .select(qUser.count())
+                .from(qUser)
+                .where(qUser.withdrawalAt.isNull())
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
+
 
     @Override
     public Optional<List<UserResponse>> findUsersByDepartmentId(String departmentId, Pageable pageable) {

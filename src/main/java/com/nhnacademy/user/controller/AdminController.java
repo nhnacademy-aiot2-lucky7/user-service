@@ -11,6 +11,7 @@ import com.nhnacademy.user.dto.UserRoleUpdateRequest;
 import com.nhnacademy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -39,8 +40,8 @@ public class AdminController {
      *
      * @return 사용자 목록
      */
-    @GetMapping("/users")
-    public ResponseEntity<List<UserResponse>> getAllUser(@PageableDefault(size = 10, sort = "eventAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    @GetMapping("/users/all")
+    public ResponseEntity<Page<UserResponse>> getAllUser(@PageableDefault(size = 10, sort = "eventAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity
                 .ok(userService.getAllUser(pageable));
     }

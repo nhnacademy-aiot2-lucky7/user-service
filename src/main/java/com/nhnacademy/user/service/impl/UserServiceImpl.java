@@ -15,6 +15,7 @@ import com.nhnacademy.user.repository.UserRepository;
 import com.nhnacademy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -116,9 +117,9 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<UserResponse> getAllUser(Pageable pageable) {
+    public Page<UserResponse> getAllUser(Pageable pageable) {
         return userRepository.findAllUserResponse(pageable)
-                .orElse(Collections.emptyList());
+                .orElse(Page.empty());
     }
 
     @Transactional(readOnly = true)

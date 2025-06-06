@@ -1,6 +1,7 @@
 package com.nhnacademy.user.service;
 
 import com.nhnacademy.user.dto.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -94,7 +95,7 @@ public interface UserService {
      *
      * @return 사용자 정보 리스트
      */
-    List<UserResponse> getAllUser(Pageable pageable);
+    Page<UserResponse> getAllUser(Pageable pageable);
 
     List<UserResponse> getUsersByDepartmentId(String departmentId, Pageable pageable);
 
