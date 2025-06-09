@@ -71,12 +71,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new NotFoundException("departmentId에 해당 하는 department는 존재하지 않습니다."));
 
-        return new DepartmentDashboardDTO(department.getMainDashboardUid(), department.getMainDashboardTitle());
+        return new DepartmentDashboardDTO(department.getMainDashboardUid(), department.getMainDashboardTitle(), departmentId);
     }
 
     @Override
     public void updateMainDashboard(DepartmentDashboardDTO departmentDashboardDTO) {
-        Department department = departmentRepository.findByMainDashboardUid(departmentDashboardDTO.getDashboardUid())
+        Department department = departmentRepository.findById(departmentDashboardDTO.getDepartmentId())
                 .orElseThrow(() -> new NotFoundException("departmentId에 해당 하는 department는 존재하지 않습니다."));
 
         department.updateMainDashboard(departmentDashboardDTO.getDashboardUid(), departmentDashboardDTO.getDashboardTitle());

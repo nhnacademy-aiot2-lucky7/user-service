@@ -11,4 +11,6 @@ public class DepartmentDashboardDTO {
     private String dashboardUid;
 
     private String dashboardTitle;
+
+    private String departmentId;
 }
