@@ -3,11 +3,13 @@ package com.nhnacademy.department.service.impl;
 import com.nhnacademy.common.exception.ConflictException;
 import com.nhnacademy.common.exception.NotFoundException;
 import com.nhnacademy.department.domain.Department;
+import com.nhnacademy.department.dto.DepartmentDashboardDTO;
 import com.nhnacademy.department.dto.DepartmentRequest;
 import com.nhnacademy.department.dto.DepartmentResponse;
 import com.nhnacademy.department.repository.DepartmentRepository;
 import com.nhnacademy.department.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new ConflictException("이미 존재하는 departmentId입니다.");
         }
 
-        Department department = new Department(departmentRequest.getDepartmentId(), departmentRequest.getDepartmentName());
+        Department department = new Department(departmentRequest.getDepartmentId(), departmentRequest.getDepartmentName(), null, null);
 
         departmentRepository.save(department);
     }
@@ -62,5 +64,21 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
 
         departmentRepository.deleteById(departmentId);
+    }
+
+    @Override
+    public DepartmentDashboardDTO getDepartmentDashboard(String departmentId) {
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new NotFoundException("departmentId에 해당 하는 department는 존재하지 않습니다."));
+
+        return new DepartmentDashboardDTO(department.getMainDashboardUid(), department.getMainDashboardTitle());
+    }
+
+    @Override
+    public void updateMainDashboard(DepartmentDashboardDTO departmentDashboardDTO) {
+        Department department = departmentRepository.findByMainDashboardUid(departmentDashboardDTO.getDashboardUid())
+                .orElseThrow(() -> new NotFoundException("departmentId에 해당 하는 department는 존재하지 않습니다."));
+
+        department.updateMainDashboard(departmentDashboardDTO.getDashboardUid(), departmentDashboardDTO.getDashboardTitle());
     }
 }

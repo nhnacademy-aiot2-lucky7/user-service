@@ -22,7 +22,18 @@ public class Department {
     @Column(name = "department_name", length = 100, nullable = false)
     private String departmentName;
 
+    @Column(name = "main_dashboard_uid", length = 200)
+    private String mainDashboardUid;
+
+    @Column(name = "main_dashboard_title", length = 200)
+    private String mainDashboardTitle;
+
     public void updateDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public void updateMainDashboard(String mainDashboardUid, String mainDashboardTitle) {
+        this.mainDashboardUid = mainDashboardUid;
+        this.mainDashboardTitle = mainDashboardTitle;
     }
 }

@@ -1,5 +1,6 @@
 package com.nhnacademy.department.service;
 
+import com.nhnacademy.department.dto.DepartmentDashboardDTO;
 import com.nhnacademy.department.dto.DepartmentRequest;
 import com.nhnacademy.department.dto.DepartmentResponse;
 
@@ -15,4 +16,8 @@ public interface DepartmentService {
     void updateDepartment(DepartmentRequest departmentRequest);
 
     void deleteDepartment(String departmentId);
+
+    DepartmentDashboardDTO getDepartmentDashboard(String mainDashboardUid);
+
+    void updateMainDashboard(DepartmentDashboardDTO departmentDashboardDTO);
 }
